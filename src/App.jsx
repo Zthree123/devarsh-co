@@ -8,6 +8,7 @@ import Login from './Login'
 import Billing from './Billing'
 import ItemMaster from './ItemMaster'
 import Additem from './Additem'
+import SalesGraph from './SalesGraph'
 
 const App = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -20,6 +21,7 @@ const App = () => {
           <Route path='/login' element={<Login />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/addItem' element={<Additem />} />
+          <Route path='/salesgraph' element={<SalesGraph />} />
           {/* <Route path='/billing' element={<Billing />} /> */}
           <Route path='/payment' element={<Payment selectedProducts={selectedProducts} setSelectedProducts={setSelectedProducts} />} />
           <Route path='/billing' element={<Billing selectedProducts={selectedProducts} setSelectedProducts={setSelectedProducts} />} />

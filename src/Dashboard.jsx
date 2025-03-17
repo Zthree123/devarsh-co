@@ -12,6 +12,7 @@ import item_qty from './images/item_qty.png'
 import sales_qty from './images/sales_qty.png'
 import sales from './images/sales.png'
 import ItemMaster from './ItemMaster'
+import SalesGraph from './SalesGraph';
 
 const Dashboard = () => {
     const [mastersOpen, setMastersOpen] = useState(false)
@@ -96,6 +97,15 @@ const Dashboard = () => {
                         </div>
                     ))
                 }
+            </div>
+
+            <div className='px-12 py-10'>
+                <p className='font-semibold text-xl pb-7'>Sales Overview</p>
+                <SalesGraph/>
+            </div>
+
+            <div className='text-center bg-blue-800 text-white py-2'>
+                <p>Copyright &copy; 2025 Devarsh & Co. All rights reserved.</p>
             </div>
         </div>
     )

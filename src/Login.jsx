@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const navigate = useNavigate();
-    const [pi, setPI] = useState(''); 
+    const [pi, setPI] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -20,15 +20,15 @@ const Login = () => {
         e.preventDefault();
         setLoading(true);
         setError("");
-    
+
         if (!pi.trim()) {
             setError("PI is required.");
             setLoading(false);
             return;
         }
-    
+
         try {
-const token = "your_secret_api_key"
+            const token = "your_secret_api_key"
 
             const response = await fetch("https://api.zthree.in/bizsura/Login", {
                 method: "POST",
@@ -37,18 +37,18 @@ const token = "your_secret_api_key"
                     "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    action: "postLogin", 
-                    username: pi.trim(),        
+                    action: "postLogin",
+                    username: pi.trim(),
                     password: password.trim(),
-                    bill_type: billType.toUpperCase(), 
+                    bill_type: billType.toUpperCase(),
                 }),
             });
-    
+
             const data = await response.json();
             console.log("API Response:", data);
             setLoading(false);
-    
-            if (data.status === "success") {  
+
+            if (data.status === "success") {
                 localStorage.setItem("user", JSON.stringify(data.results));
                 navigate("/dashboard");
             } else {
@@ -58,7 +58,7 @@ const token = "your_secret_api_key"
             setLoading(false);
             setError("Network error! Please try again.");
         }
-    };    
+    };
 
     return (
         <div className="h-screen flex items-center justify-center bg-gradient-to-r from-red-300 to-purple-500">

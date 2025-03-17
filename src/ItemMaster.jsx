@@ -3,23 +3,21 @@ import { Link } from 'react-router-dom'
 import { IoHomeOutline } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
 import { MdFirstPage, MdLastPage } from "react-icons/md";
-import { GoPlus } from "react-icons/go";
 
 const ItemMaster = () => {
-  const [mrp, setMrp] = useState(122);
+  // const [mrp, setMrp] = useState(122);
   const [products, setProducts] = useState([])
   const [searchQuery, setSearchQuery] = useState("");
-  const [openVariant, setOpenVariant] = useState(null)
   const [currentPage, setCurrentPage] = useState(1);
 
-  const retailerMargin = 0.2;
-  const stockistMargin = 0.1;
+  // const retailerMargin = 0.2;
+  // const stockistMargin = 0.1;
 
-  const calculatePTR = (mrp) => (mrp / (1 + retailerMargin)).toFixed(2);
-  const calculatePTS = (ptr) => (ptr / (1 + stockistMargin)).toFixed(2);
+  // const calculatePTR = (mrp) => (mrp / (1 + retailerMargin)).toFixed(2);
+  // const calculatePTS = (ptr) => (ptr / (1 + stockistMargin)).toFixed(2);
 
-  const ptr = calculatePTR(mrp);
-  const pts = calculatePTS(ptr);
+  // const ptr = calculatePTR(mrp);
+  // const pts = calculatePTS(ptr);
 
   const filteredProducts = products.filter((product) =>
     product.name?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -35,11 +33,11 @@ const ItemMaster = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Full API Response:", data); 
-  
+        console.log("Full API Response:", data);
+
         if (data.success && data.results.length > 0) {
-          setProducts([...data.results]); 
-console.log("Updated Products:", [...data.results]); 
+          setProducts([...data.results]);
+          console.log("Updated Products:", [...data.results]);
 
         } else {
           console.error("API Error:", data.message);
@@ -47,7 +45,7 @@ console.log("Updated Products:", [...data.results]);
       })
       .catch((error) => console.error("Fetch Error:", error));
   }, []);
-  
+
 
   return (
     <div>
@@ -63,7 +61,7 @@ console.log("Updated Products:", [...data.results]);
           </Link>
           <Link
             to='/addItem'
-            className='flex items-center gap-2 bg-green-500 text-white px-5 py-2 cursor-pointer rounded-md hover:bg-green-600'
+            className='flex items-center gap-2 bg-blue-500 text-white px-5 py-2 cursor-pointer rounded-md hover:bg-blue-600'
           >
             <FaPlus />
             <p>Add Item</p>
@@ -85,12 +83,11 @@ console.log("Updated Products:", [...data.results]);
         <table className="w-full table-fixed border-collapse">
           <thead className="bg-cyan-800 w-20">
             <tr className="text-left font-normal text-white">
-              <th className="p-3 border-r-2 border-gray-300 w-1/7">Item</th>
+              <th className="p-3 border-r-2 border-gray-300 w-2/7">Item</th>
               <th className="p-3 border-r-2 border-gray-300 w-1/7">HSN code</th>
               <th className="p-3 border-r-2 border-gray-300 w-1/7">Generic</th>
               <th className="p-3 border-r-2 border-gray-300 w-1/7">MRP</th>
               <th className="p-3 border-r-2 border-gray-300 w-2/7">Pricing</th>
-              {/* <th className="p-3 border-r-2 border-gray-300 w-1/7">Taxable Rate</th> */}
               <th className="p-3 border-r-2 border-gray-300 w-1/7">GST</th>
               <th className="p-3 w-1/7">Net Rate</th>
             </tr>
@@ -133,7 +130,6 @@ console.log("Updated Products:", [...data.results]);
                           />
                         </div>
                       </td>
-                      {/* <td className="p-3 border-r border-gray-300  w-1/7">{product.SalePrice || "N/A"}</td> */}
                       <td className="p-3 border-r border-gray-300  w-1/7">{product.gstRate || "N/A"}</td>
                       <td className="p-3 w-1/7">
                         ₹{(parseFloat(product.price_mrp) + (parseFloat(product.price_mrp) * parseFloat(product.gstRate) / 100)).toFixed(2)}
