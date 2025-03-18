@@ -9,6 +9,9 @@ import Billing from './Billing'
 import ItemMaster from './ItemMaster'
 import Additem from './Additem'
 import SalesGraph from './SalesGraph'
+import RetailerMaster from './RetailerMaster'
+import AddParty from './AddParty'
+import CustomerMaster from './CustomerMaster'
 
 const App = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -27,6 +30,9 @@ const App = () => {
           <Route path='/billing' element={<Billing selectedProducts={selectedProducts} setSelectedProducts={setSelectedProducts} />} />
           <Route path='/transactions' element={<Masters selectedProducts={selectedProducts} setSelectedProducts={setSelectedProducts} />} />
           <Route path='/itemMaster' element={<ItemMaster />} />
+          <Route path='/retailerMaster' element={<RetailerMaster />} />
+          <Route path='/customerMaster' element={<CustomerMaster />} />
+          <Route path='/addparty' element={<AddParty />} />
         </Routes>
       </BrowserRouter>
     </div>

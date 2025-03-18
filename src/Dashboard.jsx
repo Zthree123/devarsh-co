@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoHomeOutline } from "react-icons/io5";
 import { AiOutlineProduct } from "react-icons/ai";
 import { TbWindowMaximize } from "react-icons/tb";
@@ -16,13 +16,39 @@ import SalesGraph from './SalesGraph';
 
 const Dashboard = () => {
     const [mastersOpen, setMastersOpen] = useState(false)
+    const [totalItems, setTotalItems] = useState(0)
 
     const dashboard = [
         { head: 'Shortage Qty', amount: '#0', text: 'Items need to import', img: shortage_qty },
-        { head: 'Items Qty', amount: '#35', text: 'No of items in stock', img: item_qty },
+        { head: 'Items Qty', amount: `#${totalItems}`, text: 'No of items in stock', img: item_qty },
         { head: 'Sales Today', amount: 'Rs 0.00', text: 'Amount of pos sales', img: sales },
         { head: 'Sales Qty', amount: '#209', text: 'No of pos sales', img: sales_qty },
     ]
+
+    useEffect(() => {
+        const fetchItems = async () => {
+            try {
+                const response = await fetch("https://api.zthree.in/bizsura/Products?action=showProducts", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer your_secret_api_key"
+                    }
+                })
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json()
+                console.log("API Response:", data)
+
+                setTotalItems(data.total_records || 0)
+            } catch (error) {
+                console.log("Error fetching the item", error)
+            }
+        }
+
+        fetchItems()
+    }, [])
 
     return (
         <div>
@@ -42,14 +68,19 @@ const Dashboard = () => {
                     {
                         mastersOpen && (
                             <div className='absolute top-16 left-0 border z-10 bg-white border-gray-300 rounded-md w-36'>
-                                <ul className='py-1'>
+                                <ul className='py-1 flex flex-col'>
                                     <Link
                                         to='/itemMaster' element={<ItemMaster />}
                                         className='hover:bg-blue-500 hover:text-white  p-2 w-full '
                                     >
                                         Item Master
                                     </Link>
-                                    <li className='hover:bg-blue-500 hover:text-white  p-2 '>Supplier Master</li>
+                                    <Link
+                                        to='/retailerMaster' element={<ItemMaster />}
+                                        className='hover:bg-blue-500 hover:text-white  p-2 w-full '
+                                    >
+                                        Retailer Master
+                                    </Link>
                                     <li className='hover:bg-blue-500 hover:text-white  p-2 '>Customer Master</li>
                                     <li className='hover:bg-blue-500 hover:text-white p-2 '>Category Master</li>
                                 </ul>
@@ -87,12 +118,12 @@ const Dashboard = () => {
                     dashboard.map((item, index) => (
                         <div key={index} className='flex gap-3 border border-gray-300 rounded-md p-3'>
                             <div>
-                            <p className='text-gray-500'>{item.head}</p>
-                            <p className='text-4xl text-gray-600 py-2'>{item.amount}</p>
-                            <p className='text-sm text-gray-500 pt-2'>{item.text}</p>
+                                <p className='text-gray-500'>{item.head}</p>
+                                <p className='text-4xl text-gray-600 py-2'>{item.amount}</p>
+                                <p className='text-sm text-gray-500 pt-2'>{item.text}</p>
                             </div>
                             <div>
-                                <img src={item.img} alt="" className='h-28 w-24'/>
+                                <img src={item.img} alt="" className='h-28 w-24' />
                             </div>
                         </div>
                     ))
@@ -101,7 +132,7 @@ const Dashboard = () => {
 
             <div className='px-12 py-10'>
                 <p className='font-semibold text-xl pb-7'>Sales Overview</p>
-                <SalesGraph/>
+                <SalesGraph />
             </div>
 
             <div className='text-center bg-blue-800 text-white py-2'>

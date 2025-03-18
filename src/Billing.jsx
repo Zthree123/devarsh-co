@@ -335,7 +335,7 @@ const Billing = ({ selectedProducts, setSelectedProducts, profiles }) => {
                         <table className='w-full p-1 bg-blue-900 rounded-lg text-white mt-4 px-3'>
                             <thead className=''>
                                 <tr>
-                                    <th className='border-r border-gray-300'>MODE</th>
+                                    {/* <th className='border-r border-gray-300'>MODE</th> */}
                                     <th className='border-r border-gray-300'>ITEM</th>
                                     <th className='border-r border-gray-300'>UNIT</th>
                                     <th className='border-r border-gray-300'>PRICE (RS)</th>
@@ -350,7 +350,7 @@ const Billing = ({ selectedProducts, setSelectedProducts, profiles }) => {
                                     selectedProducts.map((item) => (
                                         <React.Fragment key={item.uniqueId}>
                                             <tr className='bg-white text-black'>
-                                                <td>
+                                                {/* <td>
                                                     <select
                                                         value={item.mode}
                                                         onChange={(e) => handleModeChange(item.uniqueId, e.target.value)}
@@ -359,7 +359,7 @@ const Billing = ({ selectedProducts, setSelectedProducts, profiles }) => {
                                                         <option value="Pack">Pack</option>
                                                         <option value="Strip">Strip</option>
                                                     </select>
-                                                </td>
+                                                </td> */}
                                                 <td className="border border-gray-300 p-2">{item.item}</td>
                                                 <td className=" p-2 flex items-center">
                                                     <button

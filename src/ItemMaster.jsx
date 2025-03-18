@@ -83,13 +83,14 @@ const ItemMaster = () => {
         <table className="w-full table-fixed border-collapse">
           <thead className="bg-cyan-800 w-20">
             <tr className="text-left font-normal text-white">
-              <th className="p-3 border-r-2 border-gray-300 w-2/7">Item</th>
-              <th className="p-3 border-r-2 border-gray-300 w-1/7">HSN code</th>
-              <th className="p-3 border-r-2 border-gray-300 w-1/7">Generic</th>
-              <th className="p-3 border-r-2 border-gray-300 w-1/7">MRP</th>
-              <th className="p-3 border-r-2 border-gray-300 w-2/7">Pricing</th>
-              <th className="p-3 border-r-2 border-gray-300 w-1/7">GST</th>
-              <th className="p-3 w-1/7">Net Rate</th>
+              <th className="p-3 border-r-2 border-gray-300 w-1/7 text-center">Item</th>
+              {/* <th className="p-3 border-r-2 border-gray-300 w-1/7">HSN code</th> */}
+              <th className="p-3 border-r-2 border-gray-300 w-1/7 text-center">Generic</th>
+              <th className="p-3 border-r-2 border-gray-300 w-1/7 text-center">MRP</th>
+              <th className="p-3 border-r-2 border-gray-300 w-2/7 text-center">Pricing (Without Tax)</th>
+              <th className="p-3 border-r-2 border-gray-300 w-1/7 text-center">GST</th>
+              <th className="p-3 border-r-2 border-gray-300 w-2/7 text-center">Pricing</th>
+              <th className="p-3 w-1/7 text-center">Net Rate</th>
             </tr>
           </thead>
           <tbody >
@@ -98,7 +99,7 @@ const ItemMaster = () => {
                 return (
                   <React.Fragment key={index}>
                     <tr className="text-gray-500 border-b border-gray-300 odd:bg-white even:bg-emerald-50">
-                      <td className="p-3 border-r border-gray-300 w-1/7">
+                      <td className="p-2 border-r border-gray-300 w-1/7">
                         <div className='flex items-center justify-between'>
                           <p>{product.name || "N/A"}</p>
                           {/* <button
@@ -109,29 +110,61 @@ const ItemMaster = () => {
                           </button> */}
                         </div>
                       </td>
-                      <td className="p-3 border-r border-gray-300  w-1/7">{product.hsncode || []}</td>
-                      <td className="p-3 border-r border-gray-300  w-1/7">{product.generic || []}</td>
-                      <td className="p-3 border-r border-gray-300  w-1/7">₹{product.price_mrp || []}</td>
-                      <td className="p-3 border-r border-gray-300  w-2/7">
-                        <div className="flex items-center gap-6 w-28">
+                      {/* <td className="p-3 border-r border-gray-300  w-1/7">{product.hsncode || []}</td> */}
+                      <td className="p-2 border-r border-gray-300  w-1/7">{product.generic || []}</td>
+                      <td className="p-2 border-r border-gray-300  w-1/7">₹{product.price_mrp || []}</td>
+                      <td className="px-5 border-r border-gray-300  w-2/7">
+                        <div className="flex items-center gap-6">
+                          <div className='flex items-center justify-center gap-2'>
                           <label>PTR:</label>
                           <input
                             type="text"
                             value={product.price_ptr}
                             readOnly
-                            className="outline-none border border-gray-300 rounded-md w-16 px-2 py-1"
+                            className="outline-none border border-gray-300 rounded-md w-16 px-1 py-1"
                           />
+                          </div>
+
+                          <div className="h-20 w-12 border-r-2 border-gray-300"></div>
+
+                          <div className='flex items-center justify-center gap-2'> 
                           <label>PTS:</label>
                           <input
                             type="text"
                             value={product.price_pts}
                             readOnly
-                            className="outline-none border border-gray-300 rounded-md w-16 px-2 py-1"
+                            className="outline-none border border-gray-300 rounded-md w-16 px-1 py-1"
                           />
+                          </div>
                         </div>
                       </td>
-                      <td className="p-3 border-r border-gray-300  w-1/7">{product.gstRate || "N/A"}</td>
-                      <td className="p-3 w-1/7">
+                      <td className="p-2 border-r border-gray-300  w-1/7">{product.gstRate || "N/A"}</td>
+                      <td className="px-5 border-r border-gray-300  w-2/7">
+                        <div className="flex items-center gap-6">
+                          <div className='flex items-center justify-center gap-2'>
+                            <label>PTR:</label>
+                            <input
+                              type="text"
+                              value={product.price_nett_ptr}
+                              readOnly
+                              className="outline-none border border-gray-300 rounded-md w-16 px-1 py-1"
+                            />
+                          </div>
+
+                          <div className="h-20 w-12 border-r-2 border-gray-300"></div>
+
+                          <div className='flex items-center justify-center gap-2'>
+                            <label>PTS:</label>
+                            <input
+                              type="text"
+                              value={product.price_nett_pts}
+                              readOnly
+                              className="outline-none border border-gray-300 rounded-md w-16 px-1 py-1"
+                            />
+                          </div>
+                        </div>
+                      </td>
+                      <td className="p-2 w-1/7">
                         ₹{(parseFloat(product.price_mrp) + (parseFloat(product.price_mrp) * parseFloat(product.gstRate) / 100)).toFixed(2)}
                       </td>
 
