@@ -97,7 +97,7 @@ const Login = () => {
                     </div>
 
                     <div className="flex flex-col w-full pb-3">
-                        <label htmlFor="bill_type" className="text-sm">Bill Type</label>
+                        <label htmlFor="bill_type" className="text-sm pb-1">Bill Type</label>
                         <select
                             id="bill_type"
                             className="border border-gray-300 outline-none rounded-md p-2 w-full focus:border-purple-500"

@@ -10,7 +10,7 @@ const RetailerMaster = () => {
 
     return (
         <div>
-            <div className='flex justify-between items-center p-5 bg-gray-200'>
+            <div className='flex justify-between items-center p-6 bg-gray-200'>
                 <p className='uppercase font-semibold'>devarsh & co</p>
                 <div className='flex gap-2'>
                     <Link
@@ -43,9 +43,9 @@ const RetailerMaster = () => {
                 )}
             </div>
 
-            <div className='py-8 mx-6  '>
-                <table className='w-full table-fixed rounded-md border border-gray-300'>
-                    <thead className='bg-blue-950 text-white '>
+            <div className='py-8 mx-6'>
+                <table className='w-full table-fixed border border-gray-300 border-collapse'>
+                    <thead className='bg-blue-900 text-white '>
                         <tr>
                             <th className='border-r border-gray-200 py-2 font-medium'>Party Name</th>
                             <th className='border-r border-gray-200 py-2 font-medium'>GSTIN</th>

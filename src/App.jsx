@@ -12,6 +12,7 @@ import SalesGraph from './SalesGraph'
 import RetailerMaster from './RetailerMaster'
 import AddParty from './AddParty'
 import CustomerMaster from './CustomerMaster'
+import BeatMaster from './BeatMaster'
 
 const App = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -32,6 +33,7 @@ const App = () => {
           <Route path='/itemMaster' element={<ItemMaster />} />
           <Route path='/retailerMaster' element={<RetailerMaster />} />
           <Route path='/customerMaster' element={<CustomerMaster />} />
+          <Route path='/beatMaster' element={<BeatMaster />} />
           <Route path='/addparty' element={<AddParty />} />
         </Routes>
       </BrowserRouter>

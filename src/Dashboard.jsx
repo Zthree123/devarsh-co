@@ -70,19 +70,30 @@ const Dashboard = () => {
                             <div className='absolute top-16 left-0 border z-10 bg-white border-gray-300 rounded-md w-36'>
                                 <ul className='py-1 flex flex-col'>
                                     <Link
-                                        to='/itemMaster' element={<ItemMaster />}
+                                        to='/itemMaster' 
                                         className='hover:bg-blue-500 hover:text-white  p-2 w-full '
                                     >
                                         Item Master
                                     </Link>
                                     <Link
-                                        to='/retailerMaster' element={<ItemMaster />}
+                                        to='/retailerMaster' 
                                         className='hover:bg-blue-500 hover:text-white  p-2 w-full '
                                     >
                                         Retailer Master
                                     </Link>
-                                    <li className='hover:bg-blue-500 hover:text-white  p-2 '>Customer Master</li>
-                                    <li className='hover:bg-blue-500 hover:text-white p-2 '>Category Master</li>
+                                    <Link
+                                        to='/customerMaster'
+                                        className='hover:bg-blue-500 hover:text-white p-2'
+                                    >
+                                        Customer Master
+                                    </Link>
+                                    <Link
+                                        to='/beatMaster'
+                                        className='hover:bg-blue-500 hover:text-white p-2'
+                                    >
+                                        Beat Master
+                                    </Link>
+                                    <li className='hover:bg-blue-500 hover:text-white p-2'>Category Master</li>
                                 </ul>
                             </div>
                         )

@@ -16,21 +16,54 @@ const AddParty = ({ setIsOpen, setParties }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setParty((prev) => ({
-            ...prev,
-            [name]: value, 
-        }));
+
+        if (name === "phone") {
+            if (!/^\d*$/.test(value)) return; 
+            if (value.length > 10) return; 
+        }
+
+        if (name === "gstin") {
+            if (!/^\d*$/.test(value)) return; 
+            if (value.length > 15) return; 
+        }
+
+        setParty((prev) => {
+            const updated = { ...prev, [name]: value }
+            
+            if (name === "gstin") {
+                updated.gstType = value.length === 15 ? "Registered Business - Regular" : "Unregistered/Consumer"
+            }
+
+            return updated
+        });
     };
 
     const handleSave = () => {
-        if (!party.partyName || !party.phone ){
+        if (!party.partyName || !party.phone) {
             setError("Please fill the required fields.");
             return;
         }
-
+    
+        if (party.phone.length !== 10) {
+            setError("Phone number must be exactly 10 digits.");
+            return;
+        }
+    
+        // Only validate GSTIN if it's not empty
+        if (party.gstin && party.gstin.length !== 15) {
+            setError("GSTIN must be exactly 15 digits.");
+            return;
+        }
+    
+        // Set GST Type to "Registered Business - Regular" if GSTIN is filled
+        if (party.gstin.length === 15) {
+            party.gstType = "Registered Business - Regular";
+        }
+    
         setParties((prev) => [...prev, party]); 
-        setIsOpen(false); 
+        setIsOpen(false);
     };
+    
 
     return (
         <div>
@@ -56,7 +89,7 @@ const AddParty = ({ setIsOpen, setParties }) => {
                             className="border border-gray-400 outline-none rounded-md p-2 w-full focus:border-blue-700"
                         />
                         <label className={`absolute left-3 transition-all duration-200 ${party.partyName ? "text-xs -top-2 bg-white px-1 text-blue-600" : "text-gray-400 top-2"}`}>
-                            Party Name*
+                            Party Name *
                         </label>
                     </div>
 
@@ -82,7 +115,7 @@ const AddParty = ({ setIsOpen, setParties }) => {
                             className="border border-gray-400 outline-none rounded-md p-2 w-full focus:border-blue-700"
                         />
                         <label className={`absolute left-3 transition-all duration-200 ${party.phone ? "text-xs -top-2 bg-white px-1 text-blue-600" : "text-gray-400 top-2"}`}>
-                            Phone Number*
+                            Phone Number *
                         </label>
                     </div>
                 </div>
@@ -98,7 +131,7 @@ const AddParty = ({ setIsOpen, setParties }) => {
                             className="border border-gray-400 outline-none rounded-md p-2 w-full focus:border-blue-700"
                         >
                             <option value="Unregistered/Consumer">Unregistered/Consumer</option>
-                            <option value="Registered">Registered Business - Regular</option>
+                            <option value="Registered Business - Regular">Registered Business - Regular</option>
                         </select>
                         <label className="absolute left-3 text-xs -top-2 bg-white px-1 text-blue-600 transition-all duration-200">
                             GST Type
@@ -145,7 +178,7 @@ const AddParty = ({ setIsOpen, setParties }) => {
                 </div>
             </div>
 
-            <div className='text-center text-sm text-red-600 py-5'>
+            <div className='text-center text-sm text-red-600 py-8'>
                 {error && <p>{ error}</p>}
             </div>
 
