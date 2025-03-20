@@ -13,6 +13,7 @@ import RetailerMaster from './RetailerMaster'
 import AddParty from './AddParty'
 import CustomerMaster from './CustomerMaster'
 import BeatMaster from './BeatMaster'
+import DistributorMaster from './DistributorMaster'
 
 const App = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -34,6 +35,7 @@ const App = () => {
           <Route path='/retailerMaster' element={<RetailerMaster />} />
           <Route path='/customerMaster' element={<CustomerMaster />} />
           <Route path='/beatMaster' element={<BeatMaster />} />
+          <Route path='/distributorMaster' element={<DistributorMaster />} />
           <Route path='/addparty' element={<AddParty />} />
         </Routes>
       </BrowserRouter>

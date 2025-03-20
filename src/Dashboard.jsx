@@ -81,18 +81,19 @@ const Dashboard = () => {
                                     >
                                         Retailer Master
                                     </Link>
-                                    <Link
+                                    {/* <Link
                                         to='/customerMaster'
                                         className='hover:bg-blue-500 hover:text-white p-2'
                                     >
                                         Customer Master
-                                    </Link>
+                                    </Link> */}
                                     <Link
                                         to='/beatMaster'
                                         className='hover:bg-blue-500 hover:text-white p-2'
                                     >
                                         Beat Master
                                     </Link>
+                                    <li className='hover:bg-blue-500 hover:text-white p-2'>Disributor Master</li>
                                     <li className='hover:bg-blue-500 hover:text-white p-2'>Category Master</li>
                                 </ul>
                             </div>
