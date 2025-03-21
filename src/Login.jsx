@@ -40,7 +40,7 @@ const Login = () => {
                     action: "postLogin",
                     username: pi.trim(),
                     password: password.trim(),
-                    bill_type: billType.toUpperCase(),
+                    login_type: billType.toUpperCase(),
                 }),
             });
 
@@ -52,7 +52,7 @@ const Login = () => {
                 localStorage.setItem("user", JSON.stringify(data.results));
                 navigate("/dashboard");
             } else {
-                setError(data.Message || "Invalid username or password.");
+                setError(data.message || "Invalid username or password.");
             }
         } catch (err) {
             setLoading(false);
