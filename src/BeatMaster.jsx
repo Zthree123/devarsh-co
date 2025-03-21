@@ -19,43 +19,93 @@ const BeatMaster = () => {
             setError("Please enter a name!");
             return;
         }
-
+    
         try {
-            const response = await fetch("https://api.zthree.in/bizsura/Beats", {
-                method: "POST",
+            if (editingId !== null) {
+                const response = await fetch(`https://api.zthree.in/bizsura/Beats`, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": "Bearer your_secret_api_key",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        action: "updateBeat",
+                        beat_name: name,
+                        beat_id: editingId 
+                    })
+                });
+    
+                const data = await response.json();
+    
+                if (data.status === "success") {
+                    setBeats((prevBeats) => prevBeats.map((beat) =>
+                        beat._id === editingId ? { ...beat, BeatName: name } : beat
+                    ));
+                    setName("");
+                    setEditingId(null);
+                } else {
+                    setError(`Update failed: ${data.message || "Unknown error"}`);
+                }
+            } else {
+                const response = await fetch("https://api.zthree.in/bizsura/Beats", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer your_secret_api_key",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        action: "postBeat",
+                        beat_name: name
+                    })
+                });
+    
+                const data = await response.json();
+    
+                if (data.status === "success") {
+                    setBeats((prevBeats) => [...prevBeats, { _id: data.id, BeatName: name }]);
+                    setName("");
+                } else {
+                    setError(`Failed to add beat: ${data.message || "Unknown error"}`);
+                }
+            }
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+    
+
+    const handleEdit = (beat) => {
+        setName(beat.BeatName);
+        setEditingId(beat._id);
+
+    }
+
+    const handleDelete = async (id) => {
+        try {
+            const response = await fetch(`https://api.zthree.in/bizsura/Beats`, {
+                method: "DELETE",
                 headers: {
                     "Authorization": "Bearer your_secret_api_key",
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    action: "postBeat",
-                    beat_name: name
+                    action: "deleteBeat",
+                    beat_id: id
                 })
-            })
-
-            const data = await response.json()
-            console.log("response", data)
-
+            });
+    
+            const data = await response.json();
+    
             if (data.status === "success") {
-                setBeats((prevBeats) => [...prevBeats, { _id: data.id, BeatName: name }])
-                setName("")
+                setBeats(beats.filter((beat) => beat._id !== id));
             } else {
-                setError(`failed : ${data.message || "Unknown error"}`)
+                setError("Failed to delete beat.");
             }
         } catch (error) {
-            setError(error.message)
+            setError(error.message);
         }
-    }
-
-
-    const handleEdit = (beat) => {
-        setName(beat.BeatName);
-        setEditingId(beat._id);
     };
-
-    const handleDelete = (id) => {
-        setBeats(beats.filter((beat) => beat._id !== id));
-    };
+    
 
     const filteredBeats = beats.filter((beat) =>
         beat.BeatName.toLowerCase().includes(searchQuery.toLowerCase())

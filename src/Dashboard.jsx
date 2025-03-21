@@ -11,7 +11,6 @@ import shortage_qty from './images/shortage_qty.png'
 import item_qty from './images/item_qty.png'
 import sales_qty from './images/sales_qty.png'
 import sales from './images/sales.png'
-import ItemMaster from './ItemMaster'
 import SalesGraph from './SalesGraph';
 
 const Dashboard = () => {
@@ -67,7 +66,7 @@ const Dashboard = () => {
 
                     {
                         mastersOpen && (
-                            <div className='absolute top-16 left-0 border z-10 bg-white border-gray-300 rounded-md w-36'>
+                            <div className='absolute top-16 left-0 border z-10 bg-white border-gray-300 rounded-md w-40'>
                                 <ul className='py-1 flex flex-col'>
                                     <Link
                                         to='/itemMaster' 
@@ -93,7 +92,12 @@ const Dashboard = () => {
                                     >
                                         Beat Master
                                     </Link>
-                                    <li className='hover:bg-blue-500 hover:text-white p-2'>Disributor Master</li>
+                                    <Link
+                                        to='/distributorMaster'
+                                        className='hover:bg-blue-500 hover:text-white p-2'
+                                    >
+                                        Distributor Master
+                                    </Link>
                                     <li className='hover:bg-blue-500 hover:text-white p-2'>Category Master</li>
                                 </ul>
                             </div>

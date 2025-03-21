@@ -51,6 +51,7 @@ const Login = () => {
             if (data.status === "success") {
                 localStorage.setItem("user", JSON.stringify(data.results));
                 navigate("/dashboard");
+                // window.location.reload()
             } else {
                 setError(data.message || "Invalid username or password.");
             }
