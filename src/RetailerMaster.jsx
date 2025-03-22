@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { IoHomeOutline } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
@@ -7,6 +7,32 @@ import AddParty from './AddParty';
 const RetailerMaster = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [parties, setParties] = useState([]);
+    const [retailer, setRetailer] = useState([])
+
+    useEffect(() => {
+        const fetchRetailer = async () => {
+            try {
+                const response = await fetch("https://api.zthree.in/bizsura/Party?action=showParties&vendor_id=001", {
+                    headers: {
+                        "Authorization": "Bearer your_secret_api_key",
+                        "Content-Type": "application/json"
+                    }
+                })
+                const data = await response.json()
+
+                if (data.status === "success") {
+                    setRetailer(data.results)
+                    console.log(data.results)
+                } else {
+                    console.log("Error when fetching data.")
+                }
+            } catch (error) {
+                console.error("Error fetching beats:", error);
+            }
+        }
+
+        fetchRetailer()
+    }, [])
 
     return (
         <div>
@@ -26,7 +52,7 @@ const RetailerMaster = () => {
                         className='flex items-center gap-2 bg-blue-500 text-white px-5 py-2 cursor-pointer rounded-md hover:bg-blue-600'
                     >
                         <FaPlus />
-                        <p>Add Party</p>
+                        <p>Add Retailer</p>
                     </button>
                 </div>
 
@@ -36,7 +62,7 @@ const RetailerMaster = () => {
 
                         <div className="fixed inset-0 flex items-center justify-center z-50">
                             <div className="bg-white p-5 rounded-lg shadow-lg w-[900px] ">
-                                <AddParty setIsOpen={setIsOpen} setParties={ setParties} />
+                                <AddParty setIsOpen={setIsOpen} setRetailer={setRetailer} />
                             </div>
                         </div>
                     </>
@@ -51,28 +77,31 @@ const RetailerMaster = () => {
                             <th className='border-r border-gray-200 py-2 font-medium'>GSTIN</th>
                             <th className='border-r border-gray-200 py-2 font-medium'>Phone Number</th>
                             <th className='border-r border-gray-200 py-2 font-medium'>GST Type</th>
-                            <th className='border-r border-gray-200 py-2 font-medium'>Place</th>
+                            <th className='border-r border-gray-200 py-2 font-medium'>State</th>
                             <th className='border-r border-gray-200 py-2 font-medium'>Email ID</th>
                             <th className='border-r border-gray-200 py-2 font-medium'>Billing Address</th>
                         </tr>
                     </thead>
                     <tbody className=''>
-                        {parties.map((party, index) => (
-                            <tr key={index} className="border-b border-gray-300 odd:bg-white even:bg-gray-100">
-                                <td className='border-r border-gray-200 px-4 py-2'>{party.partyName}</td>
-                                <td className='border-r border-gray-200 px-4 py-2'>{party.gstin}</td>
-                                <td className='border-r border-gray-200 px-4 py-2'>{party.phone}</td>
-                                <td className='border-r border-gray-200 px-4 py-2'>{party.gstType}</td>
-                                <td className='border-r border-gray-200 px-4 py-2'>{party.place}</td>
-                                <td className='border-r border-gray-200 px-4 py-2'>{party.email}</td>
-                                <td className='px-4 py-2'>{party.billingAddress}</td>
-                            </tr>
-                        ))}
-                        {parties.length === 0 && (
-                            <tr>
-                                <td colSpan="7" className="text-center p-4 text-gray-500">No data available</td>
-                            </tr>
-                        )}
+                        {
+                            retailer.length > 0 ? (
+                                retailer.map((party, index) => (
+                                    <tr key={index} className="border-b border-gray-300 odd:bg-white even:bg-gray-100">
+                                        <td className='border-r border-gray-200 px-4 py-2'>{party.partyName}</td>
+                                        <td className='border-r border-gray-200 px-4 py-2'>{party.gstNo}</td>
+                                        <td className='border-r border-gray-200 px-4 py-2'>{party.MobileNumber}</td>
+                                        <td className='border-r border-gray-200 px-4 py-2'>{party.gstType}</td>
+                                        <td className='border-r border-gray-200 px-4 py-2'>{party.partyState}</td>
+                                        <td className='border-r border-gray-200 px-4 py-2'>{party.email}</td>
+                                        <td className='px-4 py-2'>{party.partyFullAddress}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="7" className="text-center p-4 text-gray-500">Loading ...</td>
+                                </tr>
+                            )
+                        }
                     </tbody>
                 </table>
             </div>

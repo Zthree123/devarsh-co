@@ -7,6 +7,11 @@ import AddParty from './AddParty';
 const DistributorMaster = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [parties, setParties] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("")
+
+    const filteredItems = parties.filter((party) => 
+        party.partyName.toLowerCase().includes(searchQuery.toLowerCase())
+    )
 
     return (
         <div>
@@ -43,7 +48,16 @@ const DistributorMaster = () => {
                 )}
             </div>
 
-            <div className='py-8 mx-6'>
+            <div className='px-6 py-6'>
+                <input
+                    placeholder='Walk in'
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className='border border-gray-300 w-full rounded-md py-2 outline-none px-2'
+                    type="text" />
+            </div>
+
+            <div className='mx-6'>
                 <table className='w-full table-fixed border border-gray-300 border-collapse'>
                     <thead className='bg-blue-900 text-white '>
                         <tr>
@@ -57,22 +71,27 @@ const DistributorMaster = () => {
                         </tr>
                     </thead>
                     <tbody className=''>
-                        {parties.map((party, index) => (
-                            <tr key={index} className="border-b border-gray-300 odd:bg-white even:bg-gray-100">
-                                <td className='border-r border-gray-200 px-4 py-2'>{party.partyName}</td>
-                                <td className='border-r border-gray-200 px-4 py-2'>{party.gstin}</td>
-                                <td className='border-r border-gray-200 px-4 py-2'>{party.phone}</td>
-                                <td className='border-r border-gray-200 px-4 py-2'>{party.gstType}</td>
-                                <td className='border-r border-gray-200 px-4 py-2'>{party.place}</td>
-                                <td className='border-r border-gray-200 px-4 py-2'>{party.email}</td>
-                                <td className='px-4 py-2'>{party.billingAddress}</td>
-                            </tr>
-                        ))}
-                        {parties.length === 0 && (
-                            <tr>
-                                <td colSpan="7" className="text-center p-4 text-gray-500">No data available</td>
-                            </tr>
-                        )}
+                        {
+                            filteredItems.length > 0 ? (
+                                filteredItems.map((party, index) => (
+                                    <tr key={index} className="border-b border-gray-300 odd:bg-white even:bg-gray-100">
+                                        <td className='border-r border-gray-200 px-4 py-2'>{party.partyName}</td>
+                                        <td className='border-r border-gray-200 px-4 py-2'>{party.gstin}</td>
+                                        <td className='border-r border-gray-200 px-4 py-2'>{party.phone}</td>
+                                        <td className='border-r border-gray-200 px-4 py-2'>{party.gstType}</td>
+                                        <td className='border-r border-gray-200 px-4 py-2'>{party.place}</td>
+                                        <td className='border-r border-gray-200 px-4 py-2'>{party.email}</td>
+                                        <td className='px-4 py-2'>{party.billingAddress}</td>
+                                    </tr>
+                                ))
+                            )
+                                :  
+                                (
+                                    <tr>
+                                    <td colSpan="7" className="text-center p-4 text-gray-500">No data available</td>
+                                </tr> 
+                                )
+                        }
                     </tbody>
                 </table>
             </div>

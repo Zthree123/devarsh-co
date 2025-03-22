@@ -75,7 +75,7 @@ const ItemMaster = () => {
           placeholder='SEARCH ITEMS HERE'
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className='w-full outline-none border border-gray-300 rounded-md py-2 px-2 focus:ring-2 ring-blue-500'
+          className='w-full outline-none border border-gray-300 rounded-md py-2 px-2'
         />
       </div>
 

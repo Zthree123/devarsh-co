@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { IoMdClose } from "react-icons/io";
 
-const AddParty = ({ setIsOpen, setParties }) => {
+const AddParty = ({ setIsOpen, setRetailer }) => {
     const [error, setError] = useState("")
 
     const [party, setParty] = useState({
         partyName: "",
-        gstin: "",
-        phone: "",
+        gstIn: "",
+        mobileNumber: "",
         gstType: "Unregistered/Consumer",
         place: "",
         email: "",
@@ -17,20 +17,20 @@ const AddParty = ({ setIsOpen, setParties }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        if (name === "phone") {
-            if (!/^\d*$/.test(value)) return; 
-            if (value.length > 10) return; 
+        if (name === "mobileNumber") {
+            if (!/^\d*$/.test(value)) return;
+            if (value.length > 10) return;
         }
 
-        if (name === "gstin") {
-            if (!/^\d*$/.test(value)) return; 
-            if (value.length > 15) return; 
+        if (name === "gstIn") {
+            if (!/^[0-9A-Z]{0,15}$/.test(value)) return;
+            if (value.length > 15) return;
         }
 
         setParty((prev) => {
             const updated = { ...prev, [name]: value }
-            
-            if (name === "gstin") {
+
+            if (name === "gstIn") {
                 updated.gstType = value.length === 15 ? "Registered Business - Regular" : "Unregistered/Consumer"
             }
 
@@ -38,37 +38,85 @@ const AddParty = ({ setIsOpen, setParties }) => {
         });
     };
 
-    const handleSave = () => {
-        if (!party.partyName || !party.phone) {
+    const handleSave = async () => {
+        setError("")
+
+        if (!party.partyName || !party.mobileNumber) {
             setError("Please fill the required fields.");
             return;
         }
-    
-        if (party.phone.length !== 10) {
+
+        if (party.mobileNumber.length !== 10) {
             setError("Phone number must be exactly 10 digits.");
             return;
         }
-    
-        // Only validate GSTIN if it's not empty
-        if (party.gstin && party.gstin.length !== 15) {
+
+        if (party.gstIn && party.gstIn.length !== 15) {
             setError("GSTIN must be exactly 15 digits.");
             return;
         }
-    
-        // Set GST Type to "Registered Business - Regular" if GSTIN is filled
-        if (party.gstin.length === 15) {
+
+        if (party.gstIn.length === 15) {
             party.gstType = "Registered Business - Regular";
         }
-    
-        setParties((prev) => [...prev, party]); 
-        setIsOpen(false);
+
+        try {
+            const response = await fetch("https://api.zthree.in/bizsura/Party", {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer your_secret_api_key",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    action: "addParty",
+                    partyName: party.partyName,
+                    gstIn: party.gstIn,
+                    mobileNumber: party.mobileNumber,
+                    fullAddress: party.billingAddress,
+                    city: "",
+                    state: party.place,
+                    vendorId: "001"
+                })
+            })
+
+            if (!response.ok) {
+                throw new Error(`Server Error: ${response.status}`);
+            }
+
+            const textResponse = await response.text(); 
+            console.log("Raw response:", textResponse); 
+
+            if (!textResponse.trim()) {
+                console.warn("Warning: Empty response from server");
+                setRetailer((prevRetailer) => [...prevRetailer, party]); 
+                setIsOpen(false);
+                return;
+            }
+
+            let data;
+            try {
+                data = JSON.parse(textResponse);
+            } catch (error) {
+                console.warn("Invalid JSON response:", textResponse);
+                return;
+            }
+
+            if (data?.status === "success") {
+                setRetailer((prevRetailer) => [...prevRetailer, party])
+                setIsOpen(false)
+            } else {
+                console.log(data?.message || "Failed to add retailer.");
+            }
+        } catch (error) {
+            console.log("Error adding retailer", error)
+        }
     };
-    
+
 
     return (
         <div>
             <div className='flex items-center justify-between px-10 py-5'>
-                <p className='text-2xl font-semibold'>Add Party</p>
+                <p className='text-2xl font-semibold'>Add Retailer</p>
                 <IoMdClose
                     onClick={() => setIsOpen(false)}
                     size={40}
@@ -96,12 +144,12 @@ const AddParty = ({ setIsOpen, setParties }) => {
                     <div className="relative w-72">
                         <input
                             type="text"
-                            name="gstin"
-                            value={party.gstin}
+                            name="gstIn"
+                            value={party.gstIn}
                             onChange={handleChange}
                             className="border border-gray-400 outline-none rounded-md p-2 w-full focus:border-blue-700"
                         />
-                        <label className={`absolute left-3 transition-all duration-200 ${party.gstin ? "text-xs -top-2 bg-white px-1 text-blue-600" : "text-gray-400 top-2"}`}>
+                        <label className={`absolute left-3 transition-all duration-200 ${party.gstIn ? "text-xs -top-2 bg-white px-1 text-blue-600" : "text-gray-400 top-2"}`}>
                             GSTIN
                         </label>
                     </div>
@@ -109,12 +157,12 @@ const AddParty = ({ setIsOpen, setParties }) => {
                     <div className="relative w-72">
                         <input
                             type="text"
-                            name="phone"
-                            value={party.phone}
+                            name="mobileNumber"
+                            value={party.mobileNumber}
                             onChange={handleChange}
                             className="border border-gray-400 outline-none rounded-md p-2 w-full focus:border-blue-700"
                         />
-                        <label className={`absolute left-3 transition-all duration-200 ${party.phone ? "text-xs -top-2 bg-white px-1 text-blue-600" : "text-gray-400 top-2"}`}>
+                        <label className={`absolute left-3 transition-all duration-200 ${party.mobileNumber ? "text-xs -top-2 bg-white px-1 text-blue-600" : "text-gray-400 top-2"}`}>
                             Phone Number *
                         </label>
                     </div>
@@ -141,13 +189,13 @@ const AddParty = ({ setIsOpen, setParties }) => {
                     <div className="relative w-72 pb-8">
                         <input
                             type="text"
-                            name="place"
-                            value={party.place}
+                            name="state"
+                            value={party.state}
                             onChange={handleChange}
                             className="border border-gray-400 outline-none rounded-md p-2 w-full focus:border-blue-700"
                         />
-                        <label className={`absolute left-3 transition-all duration-200 ${party.place ? "text-xs -top-2 bg-white px-1 text-blue-600" : "text-gray-400 top-2"}`}>
-                            Place
+                        <label className={`absolute left-3 transition-all duration-200 ${party.state ? "text-xs -top-2 bg-white px-1 text-blue-600" : "text-gray-400 top-2"}`}>
+                            State
                         </label>
                     </div>
 
@@ -179,7 +227,7 @@ const AddParty = ({ setIsOpen, setParties }) => {
             </div>
 
             <div className='text-center text-sm text-red-600 py-8'>
-                {error && <p>{ error}</p>}
+                {error && <p>{error}</p>}
             </div>
 
             <div className='flex justify-end pr-16 pb-5'>

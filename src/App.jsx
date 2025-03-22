@@ -45,7 +45,7 @@ const App = () => {
             <Route path="/customerMaster" element={<CustomerMaster />} />
             <Route path="/beatMaster" element={<BeatMaster />} />
             <Route path="/distributorMaster" element={<DistributorMaster />} />
-            <Route path="/addparty" element={<AddParty />} />
+            <Route path="/addretailer" element={<AddParty />} />
           
       
       </Routes>

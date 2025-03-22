@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { HiEye } from "react-icons/hi";
 import { useNavigate } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ const Login = () => {
         setError("");
     };
 
-    const handleLogin = async (e) => {
+    const handleLogin = useCallback(async (e) => {
         e.preventDefault();
         setLoading(true);
         setError("");
@@ -51,7 +51,6 @@ const Login = () => {
             if (data.status === "success") {
                 localStorage.setItem("user", JSON.stringify(data.results));
                 navigate("/dashboard");
-                // window.location.reload()
             } else {
                 setError(data.message || "Invalid username or password.");
             }
@@ -59,7 +58,9 @@ const Login = () => {
             setLoading(false);
             setError("Network error! Please try again.");
         }
-    };
+    }, [pi, password, billType, navigate]); 
+
+    
 
     return (
         <div className="h-screen flex items-center justify-center bg-gradient-to-r from-red-300 to-purple-500">

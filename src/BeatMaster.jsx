@@ -13,13 +13,15 @@ const BeatMaster = () => {
     const [error, setError] = useState("")
     const [searchFilter, setSearchFilter] = useState(false)
     const [searchQuery, setSearchQuery] = useState("")
+    const [deleteConfirmation, setDeleteConfirmation] = useState(false)
+    const [deleteId, setDeleteId] = useState(null)
 
     const handleAddOrUpdate = async () => {
         if (!name) {
             setError("Please enter a name!");
             return;
         }
-    
+
         try {
             if (editingId !== null) {
                 const response = await fetch(`https://api.zthree.in/bizsura/Beats`, {
@@ -31,12 +33,12 @@ const BeatMaster = () => {
                     body: JSON.stringify({
                         action: "updateBeat",
                         beat_name: name,
-                        beat_id: editingId 
+                        beat_id: editingId
                     })
                 });
-    
+
                 const data = await response.json();
-    
+
                 if (data.status === "success") {
                     setBeats((prevBeats) => prevBeats.map((beat) =>
                         beat._id === editingId ? { ...beat, BeatName: name } : beat
@@ -58,9 +60,9 @@ const BeatMaster = () => {
                         beat_name: name
                     })
                 });
-    
+
                 const data = await response.json();
-    
+
                 if (data.status === "success") {
                     setBeats((prevBeats) => [...prevBeats, { _id: data.id, BeatName: name }]);
                     setName("");
@@ -72,7 +74,7 @@ const BeatMaster = () => {
             setError(error.message);
         }
     };
-    
+
 
     const handleEdit = (beat) => {
         setName(beat.BeatName);
@@ -80,7 +82,9 @@ const BeatMaster = () => {
 
     }
 
-    const handleDelete = async (id) => {
+    const handleDelete = async () => {
+        if (!deleteId) return
+
         try {
             const response = await fetch(`https://api.zthree.in/bizsura/Beats`, {
                 method: "DELETE",
@@ -90,14 +94,16 @@ const BeatMaster = () => {
                 },
                 body: JSON.stringify({
                     action: "deleteBeat",
-                    beat_id: id
+                    beat_id: deleteId
                 })
             });
-    
+
             const data = await response.json();
-    
+
             if (data.status === "success") {
-                setBeats(beats.filter((beat) => beat._id !== id));
+                setBeats(beats.filter((beat) => beat._id !== deleteId));
+                setDeleteConfirmation(false)
+                setDeleteId(null)
             } else {
                 setError("Failed to delete beat.");
             }
@@ -105,7 +111,7 @@ const BeatMaster = () => {
             setError(error.message);
         }
     };
-    
+
 
     const filteredBeats = beats.filter((beat) =>
         beat.BeatName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -199,39 +205,82 @@ const BeatMaster = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredBeats.map((beat, index) => (
-                            <tr key={beat._id} className="border-t border-gray-300">
-                                <td className='p-2 border-r border-gray-300 text-center'>{index + 1}</td>
-                                <td className='p-2 border-r border-gray-300 '></td>
-                                <td className='p-2 border-r border-gray-300'>{beat.BeatName} </td>
-                                <td className='p-2 flex gap-1 items-center justify-center border-r border-gray-300 '>
-                                    <div
-                                        onClick={() => handleEdit(beat)}
-                                        className='flex items-center justify-center gap-1 text-blue-900 cursor-pointer hover:bg-gray-200 rounded-md p-2 '>
-                                        <CiEdit
-                                            className='text-2xl'
-                                        />
-                                        <p>Edit</p>
-                                    </div>
-                                    {/* <HiOutlineWrenchScrewdriver
-                                        onClick={() => handleEdit(beat)}
-                                        className='cursor-pointer hover:bg-gray-200 rounded-md p-2 text-4xl'
-                                    /> */}
-                                    <div
-                                        onClick={() => handleDelete(beat._id)}
-                                        className='flex items-center justify-center gap-1 text-red-600 cursor-pointer hover:bg-gray-200 rounded-md p-2 '
-                                    >
-                                        <RiDeleteBinLine
-                                            className='text-2xl'
-                                        />
-                                        <p>Delete</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
+                        {
+                            filteredBeats.length > 0 ? (
+                                filteredBeats.map((beat, index) => (
+                                    <tr key={beat._id || `beat-${index}`} className="border-t border-gray-300">
+                                        <td className='p-2 border-r border-gray-300 text-center'>{index + 1}</td>
+                                        <td className='p-2 border-r border-gray-300 '></td>
+                                        <td className='p-2 border-r border-gray-300'>{beat.BeatName} </td>
+                                        <td className='p-2 flex gap-1 items-center justify-center border-r border-gray-300 '>
+                                            <div
+                                                onClick={() => handleEdit(beat)}
+                                                className='flex items-center justify-center gap-1 text-blue-900 cursor-pointer hover:bg-gray-200 rounded-md p-2 '>
+                                                <CiEdit
+                                                    className='text-2xl'
+                                                />
+                                                <p>Edit</p>
+                                            </div>
+                                            {/* <HiOutlineWrenchScrewdriver
+                                                onClick={() => handleEdit(beat)}
+                                                className='cursor-pointer hover:bg-gray-200 rounded-md p-2 text-4xl'
+                                            /> */}
+                                            <div
+                                                onClick={() => {
+                                                    setDeleteConfirmation(true)
+                                                    setDeleteId(beat._id)
+                                                }}
+                                                className='flex items-center justify-center gap-1 text-red-600 cursor-pointer hover:bg-gray-200 rounded-md p-2 '
+                                            >
+                                                <RiDeleteBinLine className='text-2xl' />
+                                                <p>Delete</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="7" className="text-center p-4 text-gray-500">
+                                        Loading ...
+                                    </td>
+                                </tr>
+                            )
+                        }
                     </tbody>
                 </table>
             </div>
+
+            {
+                deleteConfirmation && (
+                    <>
+                        <div className='fixed inset-0 bg-black/50 z-40' />
+
+                        <div className='fixed inset-0 flex items-center justify-center z-50'>
+                            <div className='bg-white p-5 rounded-md w-72'>
+                                <p className='text-2xl font-semibold'>Are you sure?</p>
+                                <p className='text-xs py-3 text-gray-500'>Once deleted, you won't be able to recover.</p>
+                                <div className='flex justify-between pt-3'>
+                                    <button
+                                        onClick={handleDelete}
+                                        className='bg-red-600 text-white px-3 py-2 rounded-md cursor-pointer'
+                                    >
+                                        Yes
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setDeleteConfirmation(false)
+                                            setDeleteId(null)
+                                        }}
+                                        className='bg-blue-600 text-white px-3 py-2 rounded-md cursor-pointer'
+                                    >
+                                        No
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )
+            }
         </div>
     )
 }
