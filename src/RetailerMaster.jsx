@@ -6,7 +6,6 @@ import AddParty from './AddParty';
 
 const RetailerMaster = () => {
     const [isOpen, setIsOpen] = useState(false)
-    const [parties, setParties] = useState([]);
     const [retailer, setRetailer] = useState([])
 
     useEffect(() => {
@@ -24,10 +23,12 @@ const RetailerMaster = () => {
                     setRetailer(data.results)
                     console.log(data.results)
                 } else {
+                    setRetailer([])
                     console.log("Error when fetching data.")
                 }
             } catch (error) {
                 console.error("Error fetching beats:", error);
+                setRetailer([])
             }
         }
 
@@ -84,7 +85,7 @@ const RetailerMaster = () => {
                     </thead>
                     <tbody className=''>
                         {
-                            retailer.length > 0 ? (
+                          retailer.length > 0 ? (
                                 retailer.map((party, index) => (
                                     <tr key={index} className="border-b border-gray-300 odd:bg-white even:bg-gray-100">
                                         <td className='border-r border-gray-200 px-4 py-2'>{party.partyName}</td>

@@ -9,7 +9,7 @@ const AddParty = ({ setIsOpen, setRetailer }) => {
         gstIn: "",
         mobileNumber: "",
         gstType: "Unregistered/Consumer",
-        place: "",
+        state: "",
         email: "",
         billingAddress: "",
     });
@@ -70,39 +70,19 @@ const AddParty = ({ setIsOpen, setRetailer }) => {
                 body: JSON.stringify({
                     action: "addParty",
                     partyName: party.partyName,
-                    gstIn: party.gstIn,
-                    mobileNumber: party.mobileNumber,
+                    gstNo: party.gstIn,
+                    MobileNumber: party.mobileNumber,
                     fullAddress: party.billingAddress,
                     city: "",
-                    state: party.place,
+                    state: party.state,
                     vendorId: "001"
                 })
             })
 
-            if (!response.ok) {
-                throw new Error(`Server Error: ${response.status}`);
-            }
+            const data = await response.json()
 
-            const textResponse = await response.text(); 
-            console.log("Raw response:", textResponse); 
-
-            if (!textResponse.trim()) {
-                console.warn("Warning: Empty response from server");
-                setRetailer((prevRetailer) => [...prevRetailer, party]); 
-                setIsOpen(false);
-                return;
-            }
-
-            let data;
-            try {
-                data = JSON.parse(textResponse);
-            } catch (error) {
-                console.warn("Invalid JSON response:", textResponse);
-                return;
-            }
-
-            if (data?.status === "success") {
-                setRetailer((prevRetailer) => [...prevRetailer, party])
+            if (data.status === "success") {
+                setRetailer(data.results);              
                 setIsOpen(false)
             } else {
                 console.log(data?.message || "Failed to add retailer.");
