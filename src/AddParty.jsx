@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IoMdClose } from "react-icons/io";
 
-const AddParty = ({ setIsOpen, setRetailer }) => {
+const AddParty = ({ setIsOpen, setRetailer, fetchRetailer }) => {
     const [error, setError] = useState("")
 
     const [party, setParty] = useState({
@@ -82,8 +82,8 @@ const AddParty = ({ setIsOpen, setRetailer }) => {
             const data = await response.json()
 
             if (data.status === "success") {
-                setRetailer(data.results);              
                 setIsOpen(false)
+                fetchRetailer()
             } else {
                 console.log(data?.message || "Failed to add retailer.");
             }
@@ -91,7 +91,6 @@ const AddParty = ({ setIsOpen, setRetailer }) => {
             console.log("Error adding retailer", error)
         }
     };
-
 
     return (
         <div>

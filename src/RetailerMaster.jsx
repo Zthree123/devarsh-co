@@ -8,30 +8,30 @@ const RetailerMaster = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [retailer, setRetailer] = useState([])
 
-    useEffect(() => {
-        const fetchRetailer = async () => {
-            try {
-                const response = await fetch("https://api.zthree.in/bizsura/Party?action=showParties&vendor_id=001", {
-                    headers: {
-                        "Authorization": "Bearer your_secret_api_key",
-                        "Content-Type": "application/json"
-                    }
-                })
-                const data = await response.json()
-
-                if (data.status === "success") {
-                    setRetailer(data.results)
-                    console.log(data.results)
-                } else {
-                    setRetailer([])
-                    console.log("Error when fetching data.")
+    const fetchRetailer = async () => {
+        try {
+            const response = await fetch("https://api.zthree.in/bizsura/Party?action=showParties&vendor_id=001", {
+                headers: {
+                    "Authorization": "Bearer your_secret_api_key",
+                    "Content-Type": "application/json"
                 }
-            } catch (error) {
-                console.error("Error fetching beats:", error);
-                setRetailer([])
-            }
-        }
+            })
+            const data = await response.json()
 
+            if (data.status === "success") {
+                setRetailer(data.results)
+                console.log(data.results)
+            } else {
+                setRetailer([])
+                console.log("Error when fetching data.")
+            }
+        } catch (error) {
+            console.error("Error fetching beats:", error);
+            setRetailer([])
+        }
+    }
+
+    useEffect(() => {
         fetchRetailer()
     }, [])
 
@@ -63,7 +63,7 @@ const RetailerMaster = () => {
 
                         <div className="fixed inset-0 flex items-center justify-center z-50">
                             <div className="bg-white p-5 rounded-lg shadow-lg w-[900px] ">
-                                <AddParty setIsOpen={setIsOpen} setRetailer={setRetailer} />
+                                <AddParty setIsOpen={setIsOpen} setRetailer={setRetailer} fetchRetailer={fetchRetailer} />
                             </div>
                         </div>
                     </>
@@ -85,17 +85,27 @@ const RetailerMaster = () => {
                     </thead>
                     <tbody className=''>
                         {
-                          retailer.length > 0 ? (
+                            retailer.length > 0 ? (
                                 retailer.map((party, index) => (
-                                    <tr key={index} className="border-b border-gray-300 odd:bg-white even:bg-gray-100">
-                                        <td className='border-r border-gray-200 px-4 py-2'>{party.partyName}</td>
-                                        <td className='border-r border-gray-200 px-4 py-2'>{party.gstNo}</td>
-                                        <td className='border-r border-gray-200 px-4 py-2'>{party.MobileNumber}</td>
-                                        <td className='border-r border-gray-200 px-4 py-2'>{party.gstType}</td>
-                                        <td className='border-r border-gray-200 px-4 py-2'>{party.partyState}</td>
-                                        <td className='border-r border-gray-200 px-4 py-2'>{party.email}</td>
-                                        <td className='px-4 py-2'>{party.partyFullAddress}</td>
-                                    </tr>
+                                    <>
+                                        <tr className={`border-b border-gray-100 text-gray-900 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                                            <td className='border-r border-gray-200 px-4 py-2'>{party.partyName}</td>
+                                            <td className='border-r border-gray-200 px-4 py-2'>{party.gstNo}</td>
+                                            <td className='border-r border-gray-200 px-4 py-2'>{party.MobileNumber}</td>
+                                            <td className='border-r border-gray-200 px-4 py-2'>{party.gstType}</td>
+                                            <td className='border-r border-gray-200 px-4 py-2'>{party.partyState}</td>
+                                            <td className='border-r border-gray-200 px-4 py-2'>{party.email}</td>
+                                            <td className='px-4 py-2'>{party.partyFullAddress}</td>
+                                        </tr>
+                                        <tr className={`border-b border-gray-300 text-sm text-gray-600 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}`}>
+                                            <td colSpan={7} className="px-4 py-2 ">
+                                                <span>Open Balance: {party.creditInfo?.OpenBal || "0.00"} |  </span>
+                                                <span>Close Balance: {party.creditInfo?.CloseBal || "0.00"} | </span>
+                                                <span>Credit Limit: {party.creditInfo?.CreditLimit || "0.00"} | </span>
+                                                <span>Credit Type: {party.creditInfo?.CreditLimitType || "N/A"}</span>
+                                            </td>
+                                        </tr>
+                                    </>
                                 ))
                             ) : (
                                 <tr>
@@ -106,7 +116,6 @@ const RetailerMaster = () => {
                     </tbody>
                 </table>
             </div>
-
         </div>
     )
 }

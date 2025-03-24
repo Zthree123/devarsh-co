@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { IoHomeOutline } from "react-icons/io5";
 import { CiEdit } from "react-icons/ci";
 import { CiFilter } from "react-icons/ci";
-import { HiOutlineWrenchScrewdriver } from "react-icons/hi2";
 import { RiDeleteBinLine } from "react-icons/ri";
 
 const BeatMaster = () => {
@@ -38,13 +37,15 @@ const BeatMaster = () => {
                 });
 
                 const data = await response.json();
+                console.log("Response", data)
 
                 if (data.status === "success") {
-                    setBeats((prevBeats) => prevBeats.map((beat) =>
+                    setBeats((prevBeats) =>
+                        prevBeats.map((beat) =>
                         beat._id === editingId ? { ...beat, BeatName: name } : beat
-                    ));
+                        ));
+                        setEditingId(null);
                     setName("");
-                    setEditingId(null);
                 } else {
                     setError(`Update failed: ${data.message || "Unknown error"}`);
                 }
@@ -62,10 +63,12 @@ const BeatMaster = () => {
                 });
 
                 const data = await response.json();
+                console.log("🔍 API Response:", data);
 
                 if (data.status === "success") {
-                    setBeats((prevBeats) => [...prevBeats, { _id: data.id, BeatName: name }]);
-                    setName("");
+                    // setBeats((prevBeats) => [...prevBeats, newBeat]);
+                setName("");
+                fetchBeats();   
                 } else {
                     setError(`Failed to add beat: ${data.message || "Unknown error"}`);
                 }
@@ -117,29 +120,30 @@ const BeatMaster = () => {
         beat.BeatName.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
-    useEffect(() => {
-        const fetchBeats = async () => {
-            try {
-                const response = await fetch("https://api.zthree.in/bizsura/Beats?action=showBeats", {
-                    headers: {
-                        "Authorization": "Bearer your_secret_api_key",
-                        "Content-Type": "application/json"
-                    }
-                });
-                const data = await response.json();
-
-                if (data.status === "success") {
-                    setBeats(data.results);
-                    console.log(data.results)
-                } else {
-                    setError("Failed to fetch beats.");
+    const fetchBeats = async () => {
+        try {
+            const response = await fetch("https://api.zthree.in/bizsura/Beats?action=showBeats", {
+                headers: {
+                    "Authorization": "Bearer your_secret_api_key",
+                    "Content-Type": "application/json"
                 }
-            } catch (error) {
-                console.error("Error fetching beats:", error);
-                setError("An error occurred while fetching data.");
+            });
+            const data = await response.json();
+            console.log(data)
+            
+            if (data.status === "success") {
+                setBeats(data.results);
+                console.log(data.results)
+            } else {
+                setError("Failed to fetch beats.");
             }
+        } catch (error) {
+            console.error("Error fetching beats:", error);
+            setError("An error occurred while fetching data.");
         }
+    }
 
+    useEffect(() => {   
         fetchBeats()
     }, [])
 
@@ -180,7 +184,7 @@ const BeatMaster = () => {
                 <p
                     onClick={() => setSearchFilter(!searchFilter)}
                 >
-                    <CiFilter className='bg-indigo-800 text-white h-10 w-12 p-2 rounded-md' />
+                    <CiFilter className='bg-indigo-800 text-white h-10 w-12 p-2 rounded-md cursor-pointer' />
                 </p>
 
                 {searchFilter &&

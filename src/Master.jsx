@@ -8,7 +8,7 @@ import { FaArrowRight } from "react-icons/fa6";
 import { BiLinkExternal } from "react-icons/bi";
 import NewProfile from './NewProfile';
 import Dashboard from './Dashboard';
-import Billing from './Billing';    
+import Billing from './Billing';
 
 const Masters = () => {
     const [selectedProducts, setSelectedProducts] = useState([])
@@ -136,7 +136,7 @@ const Masters = () => {
 
             <div className='grid grid-cols-6 fixed bottom-0 w-full right-0 text-white'>
                 <Link
-                    to='/dashboard' element={<Dashboard/>}
+                    to='/dashboard' element={<Dashboard />}
                     className='flex items-center justify-center gap-3 py-6 bg-green-500 hover:bg-green-600'
                 >
                     <IoHomeOutline />
@@ -160,7 +160,7 @@ const Masters = () => {
                 </div>
                 <div
                     className={`flex items-center justify-center gap-3 px-4 py-2 cursor-pointer
-        ${selectedProducts.length > 0 ? 'bg-green-500 hover:bg-green-600' : 'bg-green-400'}`}
+                 ${selectedProducts.length > 0 ? 'bg-green-500 hover:bg-green-600' : 'bg-green-400'}`}
                 >
                     {selectedProducts.length > 0 ? (
                         <Link to='/payment' state={{ netTotal: getNetTotal(), selectedProducts }} className='uppercase text-white flex items-center gap-2'>
@@ -172,7 +172,6 @@ const Masters = () => {
                         </button>
                     )}
                 </div>
-
             </div>
         </div>
     )
