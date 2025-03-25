@@ -4,6 +4,7 @@ import { IoHomeOutline } from "react-icons/io5";
 import { CiEdit } from "react-icons/ci";
 import { CiFilter } from "react-icons/ci";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { BiFirstPage, BiLastPage } from "react-icons/bi";
 
 const BeatMaster = () => {
     const [name, setName] = useState("")
@@ -14,6 +15,8 @@ const BeatMaster = () => {
     const [searchQuery, setSearchQuery] = useState("")
     const [deleteConfirmation, setDeleteConfirmation] = useState(false)
     const [deleteId, setDeleteId] = useState(null)
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     const handleAddOrUpdate = async () => {
         if (!name) {
@@ -42,9 +45,9 @@ const BeatMaster = () => {
                 if (data.status === "success") {
                     setBeats((prevBeats) =>
                         prevBeats.map((beat) =>
-                        beat._id === editingId ? { ...beat, BeatName: name } : beat
+                            beat._id === editingId ? { ...beat, BeatName: name } : beat
                         ));
-                        setEditingId(null);
+                    setEditingId(null);
                     setName("");
                 } else {
                     setError(`Update failed: ${data.message || "Unknown error"}`);
@@ -67,8 +70,8 @@ const BeatMaster = () => {
 
                 if (data.status === "success") {
                     // setBeats((prevBeats) => [...prevBeats, newBeat]);
-                setName("");
-                fetchBeats();   
+                    setName("");
+                    fetchBeats();
                 } else {
                     setError(`Failed to add beat: ${data.message || "Unknown error"}`);
                 }
@@ -115,11 +118,6 @@ const BeatMaster = () => {
         }
     };
 
-
-    const filteredBeats = beats.filter((beat) =>
-        beat.BeatName.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-
     const fetchBeats = async () => {
         try {
             const response = await fetch("https://api.zthree.in/bizsura/Beats?action=showBeats", {
@@ -130,7 +128,7 @@ const BeatMaster = () => {
             });
             const data = await response.json();
             console.log(data)
-            
+
             if (data.status === "success") {
                 setBeats(data.results);
                 console.log(data.results)
@@ -143,9 +141,18 @@ const BeatMaster = () => {
         }
     }
 
-    useEffect(() => {   
+    useEffect(() => {
         fetchBeats()
     }, [])
+
+    const filteredBeats = beats.filter((beat) =>
+        beat.BeatName.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+
+    const totalPages = Math.ceil(filteredBeats.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedParties = filteredBeats.slice(startIndex, endIndex);
 
     return (
         <div>
@@ -210,13 +217,13 @@ const BeatMaster = () => {
                     </thead>
                     <tbody>
                         {
-                            filteredBeats.length > 0 ? (
-                                filteredBeats.map((beat, index) => (
+                            paginatedParties.length > 0 ? (
+                                paginatedParties.map((beat, index) => (
                                     <tr key={beat._id || `beat-${index}`} className="border-t border-gray-300">
                                         <td className='p-2 border-r border-gray-300 text-center'>{index + 1}</td>
                                         <td className='p-2 border-r border-gray-300 '></td>
                                         <td className='p-2 border-r border-gray-300'>{beat.BeatName} </td>
-                                        <td className='p-2 flex gap-1 items-center justify-center border-r border-gray-300 '>
+                                        <td className='p-2 flex gap-1 items-center justify-center'>
                                             <div
                                                 onClick={() => handleEdit(beat)}
                                                 className='flex items-center justify-center gap-1 text-blue-900 cursor-pointer hover:bg-gray-200 rounded-md p-2 '>
@@ -285,6 +292,24 @@ const BeatMaster = () => {
                     </>
                 )
             }
+
+            <div className="flex justify-center items-center gap-4 my-4">
+                <button
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className={`px-4 py-2 rounded-md ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                >
+                    <BiFirstPage />
+                </button>
+                <span className="font-medium">{currentPage}</span>
+                <button
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className={`px-4 py-2 rounded-md ${currentPage === totalPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                >
+                    <BiLastPage />
+                </button>
+            </div>
         </div>
     )
 }

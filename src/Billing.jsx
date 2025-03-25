@@ -244,7 +244,7 @@ const Billing = ({ selectedProducts, setSelectedProducts, profiles }) => {
     return (
         <div>
             <div className='flex justify-between w-full gap-2 '>
-                <div className='p-2 w-3/4'>
+                <div className='px-5 pt-6 w-full '>
                     <input
                         type="text"
                         value={searchTerm}
@@ -332,16 +332,16 @@ const Billing = ({ selectedProducts, setSelectedProducts, profiles }) => {
                                 )}
                             </div>
                         )}
-                        <table className='w-full p-1 bg-blue-900 rounded-lg text-white mt-4 px-3'>
+                        <table className='w-full p-1 bg-blue-900 text-white mt-4 px-3 '>
                             <thead className=''>
                                 <tr>
                                     {/* <th className='border-r border-gray-300'>MODE</th> */}
-                                    <th className='border-r border-gray-300'>ITEM</th>
-                                    <th className='border-r border-gray-300'>UNIT</th>
-                                    <th className='border-r border-gray-300'>PRICE (RS)</th>
-                                    <th className='border-r border-gray-300'>EXPIRY</th>
-                                    <th className='border-r border-gray-300'>DISC (%)</th>
-                                    <th className='border-r border-gray-300'>SUBTOTAL (RS)</th>
+                                    <th className='border-r border-gray-300 py-1'>ITEM</th>
+                                    <th className='border-r border-gray-300 py-1'>UNIT</th>
+                                    <th className='border-r border-gray-300 py-1'>PRICE (RS)</th>
+                                    <th className='border-r border-gray-300 py-1'>EXPIRY</th>
+                                    <th className='border-r border-gray-300 py-1'>DISC (%)</th>
+                                    <th className='border-r border-gray-300 py-1'>SUBTOTAL (RS)</th>
                                     <th>REMOVE</th>
                                 </tr>
                             </thead>
@@ -415,7 +415,7 @@ const Billing = ({ selectedProducts, setSelectedProducts, profiles }) => {
                     </div>
                 </div>
 
-                <div className=' w-1/4 py-2 px-2 pb-20 text-gray-600 font-semibold'>
+                {/* <div className=' w-1/4 py-2 px-2 pb-20 text-gray-600 font-semibold'>
                     <input
                         type="text"
                         placeholder='Walk in'
@@ -438,7 +438,7 @@ const Billing = ({ selectedProducts, setSelectedProducts, profiles }) => {
                                 <p className="text-gray-500 text-sm">No profiles found.</p>
                             ) : null}
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     )

@@ -67,7 +67,7 @@ const Payment = ({selectedProducts, setSelectedProducts}) => {
     const handleClose = () => {
         localStorage.removeItem("selectedProducts"); 
         setSelectedProducts([]); 
-        navigate('/', { state: { selectedProducts: [] } }); 
+        navigate('/transactions', { state: { selectedProducts: [] } }); 
     };
     
        
@@ -260,7 +260,7 @@ const Payment = ({selectedProducts, setSelectedProducts}) => {
                         </div>
                     </div>
                     <Link
-                        to='/masters' element={<Masters/>}
+                        to='/transactions' element={<Masters/>}
                         className='flex items-center gap-2 bg-violet-800 text-white cursor-pointer p-5 justify-center rounded-md'
                     >
                         <IoMdCheckmarkCircleOutline className='text-2xl' />

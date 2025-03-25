@@ -89,24 +89,26 @@ const Masters = () => {
 
     return (
         <div>
-            <div className='flex justify-between px-3 py-3 bg-gray-200'>
+            <div className='flex justify-between px-5 py-3 bg-gray-200'>
                 <div className='inline-flex items-center gap-1'>
                     <CiGlobe className='text-xl' />
                     <p className='uppercase font-semibold'>devarsh & co</p>
                 </div>
-                <div className='flex gap-1 '>
+                <div className='flex gap-3 '>
                     <div className='inline-flex items-center'>
                         <select name="" id="" className='border text-gray-500  w-44 outline-none bg-white border-gray-400 p-1 rounded'>
                             <option value="purchase" className='uppercase text-gray-500 '>PURCHASE</option>
+                            <option value="purchase" className='uppercase text-gray-500 '>SALE</option>
                             <option value="purchase-return" className='uppercase text-gray-500'>PURCHASE RETURN</option>
+                            <option value="purchase-return" className='uppercase text-gray-500'>SALE RETURN</option>
                         </select>
                     </div>
-                    <div
+                    {/* <div
                         onClick={handleNewProfile}
                         className='inline-flex items-center text-white bg-green-600 rounded gap-1 py-1 px-2 cursor-pointer text-sm hover:bg-green-700'>
                         <FaPlus />
                         <p className='capitalize'>new profile</p>
-                    </div >
+                    </div > */}
                     <div
                         onClick={clearScreen}
                         className='inline-flex items-center text-white bg-red-600 rounded gap-1 py-1 px-2 cursor-pointer text-sm hover:bg-red-700'>
@@ -122,11 +124,11 @@ const Masters = () => {
                 </div>
             </div>
 
-            <NewProfile
+            {/* <NewProfile
                 showProfile={showProfile}
                 onClose={closeProfileModal}
                 addProfile={handleAddProfile}
-            />
+            /> */}
 
             <Billing
                 selectedProducts={selectedProducts}
@@ -158,20 +160,23 @@ const Masters = () => {
                     <p className='uppercase'>net total</p>
                     <p>RS {getNetTotal()}</p>
                 </div>
-                <div
-                    className={`flex items-center justify-center gap-3 px-4 py-2 cursor-pointer
-                 ${selectedProducts.length > 0 ? 'bg-green-500 hover:bg-green-600' : 'bg-green-400'}`}
-                >
-                    {selectedProducts.length > 0 ? (
-                        <Link to='/payment' state={{ netTotal: getNetTotal(), selectedProducts }} className='uppercase text-white flex items-center gap-2'>
-                            <FaArrowRight /> Next
-                        </Link>
-                    ) : (
-                        <button disabled className='uppercase cursor-not-allowed text-gray-500 flex items-center gap-2'>
-                            <FaArrowRight /> Next
-                        </button>
-                    )}
-                </div>
+
+                {selectedProducts.length > 0 ? (
+                    <Link
+                        to='/payment'
+                        state={{ netTotal: getNetTotal(), selectedProducts }}
+                        className="flex items-center justify-center gap-3 px-4 py-2 uppercase text-white bg-green-500 hover:bg-green-600 rounded-md"
+                    >
+                        <FaArrowRight /> Next
+                    </Link>
+                ) : (
+                    <button
+                        disabled
+                        className="flex items-center justify-center gap-3 px-4 py-2 uppercase cursor-not-allowed text-gray-500 bg-green-400 rounded-md"
+                    >
+                        <FaArrowRight /> Next
+                    </button>
+                )}
             </div>
         </div>
     )

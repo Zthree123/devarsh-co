@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { IoHomeOutline } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
-import { MdFirstPage, MdLastPage } from "react-icons/md";
+import { BiFirstPage, BiLastPage } from "react-icons/bi";
 
 const ItemMaster = () => {
   // const [mrp, setMrp] = useState(122);
   const [products, setProducts] = useState([])
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-
+  const itemsPerPage = 10;
+  
   // const retailerMargin = 0.2;
   // const stockistMargin = 0.1;
 
@@ -18,10 +19,6 @@ const ItemMaster = () => {
 
   // const ptr = calculatePTR(mrp);
   // const pts = calculatePTS(ptr);
-
-  const filteredProducts = products.filter((product) =>
-    product.name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   useEffect(() => {
     fetch("https://api.zthree.in/bizsura/Products?action=showProducts", {
@@ -46,6 +43,14 @@ const ItemMaster = () => {
       .catch((error) => console.error("Fetch Error:", error));
   }, []);
 
+  const filteredProducts = products.filter((product) =>
+    product.name?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedParties = filteredProducts.slice(startIndex, endIndex);
 
   return (
     <div>
@@ -81,7 +86,7 @@ const ItemMaster = () => {
 
       <div className="border border-gray-300 rounded-md overflow-hidden mx-5">
         <table className="w-full table-fixed border-collapse">
-          <thead className="bg-cyan-800 w-20">
+          <thead className="bg-blue-900 w-20">
             <tr className="text-left font-normal text-white">
               <th className="p-3 border-r-2 border-gray-300 w-1/7 text-center">Item</th>
               <th className="p-3 border-r-2 border-gray-300 w-1/7 text-center">MRP</th>
@@ -91,8 +96,8 @@ const ItemMaster = () => {
             </tr>
           </thead>
           <tbody >
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product, index) => {
+            {paginatedParties.length > 0 ? (
+              paginatedParties.map((product, index) => {
                 return (
                   <React.Fragment key={index}>
                     <tr className="text-gray-500 border-b border-gray-300 odd:bg-white even:bg-emerald-50">
@@ -168,11 +173,23 @@ const ItemMaster = () => {
         </table>
       </div>
 
-      <div className='flex items-center justify-center gap-3 py-10'>
-        <MdFirstPage size={25} className='text-gray-500 cursor-pointer' onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} />
-        <span> {currentPage}</span>
-        <MdLastPage size={25} className='text-gray-500 cursor-pointer' onClick={() => setCurrentPage(prev => prev + 1)} />
-      </div>
+      <div className="flex justify-center items-center gap-4 my-4">
+                          <button
+                              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                              disabled={currentPage === 1}
+                              className={`px-4 py-2 rounded-md ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                          >
+                              <BiFirstPage />
+                          </button>
+                          <span className="font-medium">{currentPage}</span>
+                          <button
+                              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                              disabled={currentPage === totalPages}
+                              className={`px-4 py-2 rounded-md ${currentPage === totalPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                          >
+                              <BiLastPage />
+                          </button>
+                      </div>
 
     </div>
   )

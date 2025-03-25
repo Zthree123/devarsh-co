@@ -108,7 +108,7 @@ const Dashboard = () => {
                     to='/transactions'
                     className='flex items-center gap-2 bg-gray-200 p-3 rounded-md hover:bg-white cursor-pointer'>
                     <TbWindowMaximize />
-                    <p>Transactions</p>
+                    <p>Billing</p>
                 </Link>
                 <div className='flex items-center gap-2 bg-gray-200 p-3 rounded-md hover:bg-white cursor-pointer'>
                     <TbReport />

@@ -34,22 +34,22 @@ const App = () => {
           isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
         } /> */}
 
-        
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/addItem" element={<Additem />} />
-            <Route path="/salesgraph" element={<SalesGraph />} />
-            <Route path="/payment" element={<Payment selectedProducts={selectedProducts} setSelectedProducts={setSelectedProducts} />} />
-            <Route path="/billing" element={<Billing selectedProducts={selectedProducts} setSelectedProducts={setSelectedProducts} />} />
-            <Route path="/transactions" element={<Masters selectedProducts={selectedProducts} setSelectedProducts={setSelectedProducts} />} />
-            <Route path="/itemMaster" element={<ItemMaster />} />
-            <Route path="/retailerMaster" element={<RetailerMaster />} />
-            <Route path="/customerMaster" element={<CustomerMaster />} />
-            <Route path="/beatMaster" element={<BeatMaster />} />
-            <Route path="/distributorMaster" element={<DistributorMaster />} />
-            <Route path="/addretailer" element={<AddParty />} />
-            <Route path="/purchases" element={<Purchases />} />
-    
-      
+
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/addItem" element={<Additem />} />
+        <Route path="/salesgraph" element={<SalesGraph />} />
+        <Route path="/payment" element={<Payment selectedProducts={selectedProducts} setSelectedProducts={setSelectedProducts} />} />
+        {/* <Route path="/billing" element={<Billing selectedProducts={selectedProducts} setSelectedProducts={setSelectedProducts} />} /> */}
+        <Route path="/transactions" element={<Masters selectedProducts={selectedProducts} setSelectedProducts={setSelectedProducts} />} />
+        <Route path="/itemMaster" element={<ItemMaster />} />
+        <Route path="/retailerMaster" element={<RetailerMaster />} />
+        <Route path="/customerMaster" element={<CustomerMaster />} />
+        <Route path="/beatMaster" element={<BeatMaster />} />
+        <Route path="/distributorMaster" element={<DistributorMaster />} />
+        <Route path="/addretailer" element={<AddParty />} />
+        <Route path="/purchases" element={<Purchases />} />
+
+
       </Routes>
     </BrowserRouter>
   );
