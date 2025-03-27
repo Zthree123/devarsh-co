@@ -5,20 +5,10 @@ import { FaPlus } from "react-icons/fa6";
 import { BiFirstPage, BiLastPage } from "react-icons/bi";
 
 const ItemMaster = () => {
-  // const [mrp, setMrp] = useState(122);
   const [products, setProducts] = useState([])
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  
-  // const retailerMargin = 0.2;
-  // const stockistMargin = 0.1;
-
-  // const calculatePTR = (mrp) => (mrp / (1 + retailerMargin)).toFixed(2);
-  // const calculatePTS = (ptr) => (ptr / (1 + stockistMargin)).toFixed(2);
-
-  // const ptr = calculatePTR(mrp);
-  // const pts = calculatePTS(ptr);
 
   useEffect(() => {
     fetch("https://api.zthree.in/bizsura/Products?action=showProducts", {
@@ -165,7 +155,7 @@ const ItemMaster = () => {
             ) : (
               <tr>
                 <td colSpan="7" className="text-center p-4 text-gray-500">
-                  Loading products...
+                  No items found    
                 </td>
               </tr>
             )}

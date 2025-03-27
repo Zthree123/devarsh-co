@@ -1,0 +1,108 @@
+import React, { useEffect, useState, useRef } from 'react'
+import { data } from 'react-router-dom';
+
+const PartyAdding = () => {
+    const [retailers, setRetailers] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedRetailer, setSelectedRetailer] = useState(null);
+    const [showDropdown, setShowDropdown] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        fetch("https://api.zthree.in/bizsura/Party?action=showParties&vendor_id=001", {
+            headers: { "Authorization": "Bearer your_secret_api_key" }
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("Full API Response:", data);
+                if (Array.isArray(data.results)) {
+                    setRetailers(data.results);
+                } else {
+                    console.error("Unexpected API response:", data);
+                }
+            })
+            .catch((err) => console.error("Error fetching retailers:", err));
+    }, []);
+
+    const filteredRetailers = retailers.filter(retailer =>
+        retailer.partyName?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const selectRetailer = (retailer) => {
+        console.log("Selected Retailer:", retailer);
+        setSelectedRetailer(retailer);
+        setSearchQuery(retailer.partyName);
+        setShowDropdown(false);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setShowDropdown(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    return (
+        <div>
+            <div className='flex justify-between w-full py-5 px-5'>
+                <div className='relative' ref={dropdownRef}>
+                    <input
+                        type="text"
+                        placeholder='SEARCH BY NAME'
+                        value={searchQuery}
+                        onChange={(e) => {
+                            setSearchQuery(e.target.value);
+                            setShowDropdown(true); // Show dropdown when typing
+                        }}
+                        className='w-60 h-10 px-2 outline-none border border-gray-300 rounded-md'
+                    />
+                    {showDropdown && searchQuery && (
+                        <div className="absolute left-0 top-12 w-60 bg-white border border-gray-300 rounded-md shadow-md z-10">
+                            {filteredRetailers.length > 0 ? (
+                                filteredRetailers.map((retailer) => (
+                                    <div key={retailer.id} className="p-2 cursor-pointer hover:bg-gray-200"
+                                        onClick={() => selectRetailer(retailer)}>
+                                        {retailer.partyName}
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="p-2 text-gray-500">No retailers found</div>
+                            )}
+                        </div>
+                    )}
+                </div>
+
+                <div>
+                    <div className='flex gap-5 items-center justify-center'>
+                        <label htmlFor="">Invoice Number</label>
+                        <input
+                            type="text"
+                            className='w-56 h-10 px-2 outline-none border-b border-gray-300 '
+                        />
+                    </div>
+                    <div className='flex gap-5 items-center justify-center'>
+                        <label htmlFor="" className='w-28'>Invoice Date</label>
+                        <input
+                            type="date"
+                            className='w-56 h-10 px-2 outline-none border-b border-gray-300 '
+                        />
+                    </div>
+                    <div className='flex gap-5 items-center justify-center'>
+                        <label htmlFor="" className='w-28'>State of supply</label>
+                        <input
+                            className='w-56 h-10 px-2 outline-none border-b border-gray-300 '
+                            type="text"
+                            value={selectedRetailer?.partyState || ""}
+                            readOnly
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default PartyAdding

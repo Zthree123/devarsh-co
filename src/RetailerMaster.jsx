@@ -45,7 +45,7 @@ const RetailerMaster = () => {
         fetchRetailer()
     }, [])
 
-    const filteredParty = retailer.filter((party) => 
+    const filteredParty = retailer.filter((party) =>
         party.partyName.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
@@ -113,7 +113,7 @@ const RetailerMaster = () => {
                             <th className='border-r border-gray-200 py-2 font-medium'>Action</th>
                         </tr>
                     </thead>
-                    <tbody className=''>
+                    <tbody>
                         {
                             paginatedParties.length > 0 ? (
                                 paginatedParties.map((party, index) => (
@@ -127,11 +127,11 @@ const RetailerMaster = () => {
                                             <td className='border-r border-gray-100 px-4 py-2'>{party.email}</td>
                                             <td className='border-r border-gray-100 px-4 py-2'>{party.partyFullAddress}</td>
                                             <td className='flex items-center justify-center py-3 gap-3'>
-                                                <CiEdit className='text-2xl text-blue-800 cursor-pointer'/>
+                                                <CiEdit className='text-2xl text-blue-800 cursor-pointer' />
                                                 <RiDeleteBinLine
                                                     // onClick={() => handleDelete(party.partyId)}
                                                     className='text-2xl text-red-600 cursor-pointer'
-                                                />              
+                                                />
                                             </td>
                                         </tr>
                                         <tr className={`border-b border-gray-300 text-sm text-gray-600 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}`}>
@@ -146,7 +146,7 @@ const RetailerMaster = () => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="8" className="text-center p-4 text-gray-500">Loading ...</td>
+                                    <td colSpan="8" className="text-center p-4 text-gray-500">No items found</td>
                                 </tr>
                             )
                         }
@@ -155,22 +155,22 @@ const RetailerMaster = () => {
             </div>
 
             <div className="flex justify-center items-center gap-4 my-4">
-                    <button
-                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                        disabled={currentPage === 1}
-                        className={`px-4 py-2 rounded-md ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
-                    >
-                        <BiFirstPage />
-                    </button>
-                    <span className="font-medium">{currentPage}</span>
-                    <button
-                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                        disabled={currentPage === totalPages}
-                        className={`px-4 py-2 rounded-md ${currentPage === totalPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
-                    >
-                        <BiLastPage />
-                    </button>
-                </div>
+                <button
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className={`px-4 py-2 rounded-md ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                >
+                    <BiFirstPage />
+                </button>
+                <span className="font-medium">{currentPage}</span>
+                <button
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className={`px-4 py-2 rounded-md ${currentPage === totalPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                >
+                    <BiLastPage />
+                </button>
+            </div>
         </div>
     )
 }

@@ -252,7 +252,7 @@ const BeatMaster = () => {
                             ) : (
                                 <tr>
                                     <td colSpan="7" className="text-center p-4 text-gray-500">
-                                        Loading ...
+                                        No items found
                                     </td>
                                 </tr>
                             )

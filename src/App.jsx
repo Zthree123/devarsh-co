@@ -15,6 +15,8 @@ import BeatMaster from './BeatMaster';
 import DistributorMaster from './DistributorMaster';
 import ProtectedRoute from './ProtectedRoute';
 import Purchases from './Purchases';
+import ParentItems from './ParentItems';
+import PartyAdding from './PartyAdding';
 
 const App = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -48,6 +50,8 @@ const App = () => {
         <Route path="/distributorMaster" element={<DistributorMaster />} />
         <Route path="/addretailer" element={<AddParty />} />
         <Route path="/purchases" element={<Purchases />} />
+        <Route path="/parentItem" element={<ParentItems />} />
+        <Route path="/partyadding" element={<PartyAdding />} />
 
 
       </Routes>

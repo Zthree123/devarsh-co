@@ -9,11 +9,17 @@ import { BiLinkExternal } from "react-icons/bi";
 import NewProfile from './NewProfile';
 import Dashboard from './Dashboard';
 import Billing from './Billing';
+import PartyAdding from './PartyAdding';
 
 const Masters = () => {
     const [selectedProducts, setSelectedProducts] = useState([])
     const [showProfile, setShowProfile] = useState(false)
     const [profiles, setProfiles] = useState([]);
+    const [isCredit, setIsCredit] = useState(true);
+
+    const togglePaymentMode = () => {
+        setIsCredit(!isCredit);
+    };
 
     const handleFullScreen = () => {
         if (document.documentElement.requestFullscreen) {
@@ -90,11 +96,26 @@ const Masters = () => {
     return (
         <div>
             <div className='flex justify-between px-5 py-3 bg-gray-200'>
-                <div className='inline-flex items-center gap-1'>
-                    <CiGlobe className='text-xl' />
-                    <p className='uppercase font-semibold'>devarsh & co</p>
-                </div>
-                <div className='flex gap-3 '>
+                <div className='inline-flex items-center gap-5'>
+                    <div className="flex items-center space-x-3">
+                        <span className={!isCredit ? "text-blue-600 font-semibold" : "text-gray-500"}>
+                            Cash
+                        </span>
+                        <button
+                            onClick={togglePaymentMode}
+                            className={`w-12 h-6 flex items-center rounded-full p-1 transition-all 
+                              ${isCredit ? "bg-blue-200" : "bg-blue-200"}`}
+                        >
+                            <div
+                                className={`w-4 h-4 bg-blue-600 rounded-full shadow-md transform transition-all 
+                                 ${isCredit ? "translate-x-6" : "translate-x-0"}`}
+                            />
+                        </button>
+                        <span className={isCredit ? "text-blue-600 font-semibold" : "text-gray-500"}>
+                            Credit
+                        </span>
+                    </div>
+
                     <div className='inline-flex items-center'>
                         <select name="" id="" className='border text-gray-500  w-44 outline-none bg-white border-gray-400 p-1 rounded'>
                             <option value="purchase" className='uppercase text-gray-500 '>PURCHASE</option>
@@ -103,21 +124,24 @@ const Masters = () => {
                             <option value="purchase-return" className='uppercase text-gray-500'>SALE RETURN</option>
                         </select>
                     </div>
+                    {/* <CiGlobe className='text-xl' />
+                    <p className='uppercase font-semibold'>devarsh & co</p> */}
+                </div>
+                <div className='flex gap-3 '>
                     {/* <div
-                        onClick={handleNewProfile}
-                        className='inline-flex items-center text-white bg-green-600 rounded gap-1 py-1 px-2 cursor-pointer text-sm hover:bg-green-700'>
-                        <FaPlus />
-                        <p className='capitalize'>new profile</p>
-                    </div > */}
-                    <div
                         onClick={clearScreen}
                         className='inline-flex items-center text-white bg-red-600 rounded gap-1 py-1 px-2 cursor-pointer text-sm hover:bg-red-700'>
                         <MdClear />
                         <p className='capitalize'>clear screen</p>
-                    </div>
+                    </div> */}
+                    <Link to="/dashboard">
+                        <button className=' bg-green-400 rounded gap-1 h-8 w-8 flex items-center justify-center  cursor-pointer hover:bg-green-500' size={10}>
+                            <IoHomeOutline />
+                        </button>
+                    </Link>
                     <button
                         onClick={handleFullScreen}
-                        className='inline-flex items-center bg-yellow-400 rounded gap-1 py-1 px-2 cursor-pointer text-sm hover:bg-yellow-500'
+                        className=' bg-yellow-400 rounded gap-1 py-1 px-2 cursor-pointer text-md hover:bg-yellow-500'
                     >
                         <BiLinkExternal />
                     </button>
@@ -130,13 +154,15 @@ const Masters = () => {
                 addProfile={handleAddProfile}
             /> */}
 
+            <PartyAdding />
+
             <Billing
                 selectedProducts={selectedProducts}
                 setSelectedProducts={setSelectedProducts}
                 profiles={profiles}
             />
 
-            <div className='grid grid-cols-6 fixed bottom-0 w-full right-0 text-white'>
+            {/* <div className='grid grid-cols-6 fixed bottom-0 w-full right-0 text-white'>
                 <Link
                     to='/dashboard' element={<Dashboard />}
                     className='flex items-center justify-center gap-3 py-6 bg-green-500 hover:bg-green-600'
@@ -177,7 +203,7 @@ const Masters = () => {
                         <FaArrowRight /> Next
                     </button>
                 )}
-            </div>
+            </div> */}
         </div>
     )
 }
