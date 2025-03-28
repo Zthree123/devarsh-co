@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import { RiDeleteBinLine } from "react-icons/ri";
 
-const Billing = () => {
+const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, setItemNames }) => {
     const [products, setProducts] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -38,7 +39,6 @@ const Billing = () => {
         setSearchQuery("");
     };
 
-
     const updateQuantity = (index, amount) => {
         setSelectedProducts((prevProducts) => {
             return prevProducts.map((p, i) =>
@@ -51,13 +51,39 @@ const Billing = () => {
         setSelectedProducts(selectedProducts.filter((_, i) => i !== index));
     };
 
+    useEffect(() => {
+        const subTotalQty = selectedProducts.reduce((total, product) => total + product.quantity, 0); 
+        const totalQty = selectedProducts.length;
+        const itemNamesList = selectedProducts.map((product) => product.name);
+    
+        const discAmount = selectedProducts.reduce((total, product) => {
+            const price = selectedPriceType === "withTax" ? product.price_nett_ptr : product.price_ptr;
+            return total + ((price * product.quantity * product.discount) / 100);
+        }, 0);
+    
+        const totalAmount = selectedProducts.reduce((total, product) => {
+            const price = selectedPriceType === "withTax" ? product.price_nett_ptr : product.price_ptr;
+            return total + ((price * product.quantity) - ((price * product.quantity * product.discount) / 100));
+        }, 0);
+    
+        setSubTotalQty(subTotalQty);  
+        setTotalQty(totalQty);        
+        setDiscAmount(discAmount.toFixed(2)); 
+        setTotalAmount(totalAmount.toFixed(2));
+    
+        // Ensure setItemNames is properly called
+        if (typeof setItemNames === "function") {
+            setItemNames(itemNamesList);
+        }
+    }, [selectedProducts, selectedPriceType, setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, setItemNames]);
+    
     return (
         <div>
             <div className='flex justify-between w-full gap-2 '>
                 <div className='px-5 pt-6 w-full '>
                     <input
                         type="text"
-                        className='outline-none w-full border border-gray-400 rounded px-1 py-2'
+                        className='outline-none w-full border border-gray-300 rounded px-1 py-2'
                         placeholder='SEARCH ITEMS'
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -78,31 +104,29 @@ const Billing = () => {
                     )}
 
                     <div className='overflow-x-auto pb-16'>
-                        <table className='w-full border border-gray-300  mt-4 px-3 '>
+                        <table className='w-full border-2 border-gray-300  mt-4 px-3 '>
                             <thead className='p-1 bg-blue-900 text-white'>
                                 <tr>
-                                    <th className='border-r border-gray-300 py-1 w-1/10'>ITEM</th>
-                                    <th className='border-r border-gray-300 py-1 w-1/10'>BATCH NO</th>
-                                    <th className='border-r border-gray-300 py-1 w-1/10'>EXPIRY</th>
-                                    <th className='border-r border-gray-300 py-1 w-1/10'>MRP</th>
-                                    <th className='border-r border-gray-300 py-1 w-1/10'>QTY</th>
-                                    <th className='border-r border-gray-300 py-1 w-1/10'> PRICE (RS)
-                                       
-                                    </th>
-                                    <th className='border-r border-gray-300 py-1 w-1/10' colSpan={2}>DISCOUNT</th>
-                                    <th className='border-r border-gray-300 py-1 w-1/10' colSpan={2}>TAX</th>
-                                    <th className='border-r border-gray-300 py-1 w-1/10'>AMOUNT</th>
-                                    <th>REMOVE</th>
+                                    <th className='border-r border-gray-300 py-1 w-1/10 font-medium'>ITEM</th>
+                                    <th className='border-r border-gray-300 py-1 w-1/10 font-medium'>BATCH </th>
+                                    <th className='border-r border-gray-300 py-1 w-1/10 font-medium'>EXPIRY</th>
+                                    <th className='border-r border-gray-300 py-1 w-1/10 font-medium'>MRP</th>
+                                    <th className='border-r border-gray-300 py-1 w-1/10 font-medium'>QTY</th>
+                                    <th className='border-r border-gray-300 py-1 w-1/10 font-medium'> PRICE (RS)</th>
+                                    <th className='border-r border-gray-300 py-1 w-1/10 font-medium' colSpan={2}>DISCOUNT</th>
+                                    <th className='border-r border-gray-300 py-1 w-1/10 font-medium' colSpan={2}>GST</th>
+                                    <th className='border-r border-gray-300 py-1 w-1/10 font-medium'>AMOUNT</th>
+                                    <th className='font-medium'>REMOVE</th>
                                 </tr>
                                 <tr>
                                     <th className='border-r border-gray-300 py-1 w-1/10'></th>
-                                    <th className='border-r border-gray-300 py-1 w-1/10'></th>
-                                    <th className='border-r border-gray-300 py-1 w-1/10'></th>
-                                    <th className='border-r border-gray-300 py-1 w-1/10'></th>
+                                    <th className='border-r border-gray-300 py-1 w-1/10 font-medium'>NO</th>
+                                    <th className='border-r border-gray-300 py-1 w-1/10 '></th>
+                                    <th className='border-r border-gray-300 py-1 w-1/10 font-medium'>(RS)</th>
                                     <th className='border-r border-gray-300 py-1 w-1/10'></th>
                                     <th className='border border-gray-300 py-1 w-1/10 bg-white'>
-                                    <select
-                                            className='rounded w-32 outline-none bg-white text-black'
+                                        <select
+                                            className='rounded w-32 outline-none bg-white text-black font-medium'
                                             value={selectedPriceType}
                                             onChange={(e) => setSelectedPriceType(e.target.value)}
                                         >
@@ -111,15 +135,14 @@ const Billing = () => {
                                         </select>
                                     </th>
 
-                                    {/* Two separate discount sub-columns */}
-                                    <th className='border border-gray-300 py-1 w-1/10'>%</th>
-                                    <th className='border border-gray-300 py-1 w-1/10'>AMOUNT</th>
+                                    <th className='border border-gray-300 py-1 w-20 font-medium'>%</th>
+                                    <th className='border border-gray-300 py-1 w-20 font-medium'>RS</th>
+ 
+                                    <th className='border border-gray-300 py-1 w-20 font-medium'>%</th>
+                                    <th className='border border-gray-300 py-1 w-20 font-medium'>RS</th>
 
-                                    <th className='border border-gray-300 py-1 w-1/10'>%</th>
-                                    <th className='border border-gray-300 py-1 w-1/10'>AMOUNT</th>
-
-                                    <th className='border-r border-gray-300 py-1 w-1/10'></th>    
-                                    <th className='border-r border-gray-300 py-1 w-1/10'></th>    
+                                    <th className='border-r border-gray-300 py-1 w-1/10 font-medium'>(RS)</th>
+                                    <th className='border-r border-gray-300 py-1 w-1/10'></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -128,28 +151,28 @@ const Billing = () => {
                                         selectedProducts.map((product, index) => (
                                             <tr key={product.id} className='bg-white text-gray-700'>
                                                 <td className="border border-gray-300 p-2">{product.name}</td>
-                                                <td className="p-2 flex items-center justify-center">
+                                                <td className="border border-gray-300 p-2">{product.batchno || ""}</td>
+                                                <td className="border border-gray-300 p-2">{product.expiry || ""}</td>
+                                                <td className="border border-gray-300 p-2">{product.price_mrp || ""}</td>
+                                                <td className="border border-gray-300 p-2">
                                                     <button
                                                         onClick={() => updateQuantity(index, 1)}
-                                                        className="px-2 py-1 bg-green-500 rounded-sm cursor-pointer text-white"
+                                                        className="w-7 h-7 bg-green-500 rounded-sm cursor-pointer text-white"
                                                     >
                                                         +
                                                     </button>
                                                     <span className="px-2">{product.quantity}</span>
                                                     <button
                                                         onClick={() => updateQuantity(index, -1)}
-                                                        className="px-2 py-1 bg-red-500 rounded-sm cursor-pointer text-white"
+                                                        className="w-7 h-7 bg-red-500 rounded-sm cursor-pointer text-white"
                                                     >
                                                         -
                                                     </button>
                                                 </td>
-                                                <td className="border border-gray-300 p-2">{product.expiry || ""}</td>
-                                                <td className="border border-gray-300 p-2">{product.price_mrp || ""}</td>
-                                                <td className="border border-gray-300 p-2">{product.qty || ""}</td>
                                                 <td className="border border-gray-300 p-2 text-center">
                                                     {selectedPriceType === "withTax" ? product.price_nett_ptr : product.price_ptr}
                                                 </td>
-                                                <td className="p-2 flex items-center justify-center">
+                                                <td className="p-2 ">
                                                     <input
                                                         type="text"
                                                         min="0"
@@ -166,29 +189,30 @@ const Billing = () => {
                                                         }}
                                                     />
                                                 </td>
-                                                <td></td>
-                                                <td>{product.gstRate}</td>
-                                                <td></td>
+                                                <td className="border border-gray-300 p-2">{((product.price_ptr * product.quantity * product.discount) / 100).toFixed(2)}</td>
+                                                <td className="border border-gray-300 p-2">{product.gstRate}</td>
+                                                <td className="border border-gray-300 p-2">{(((product.price_ptr * product.quantity * (1 - product.discount / 100)) * product.gstRate) / 100).toFixed(2)}</td>
                                                 <td className="border border-gray-300 p-2">
-                                                    {(
-                                                        (parseFloat(product.selectedPriceType === "withTax" ? product.price_nett_ptr : product.price_ptr)
-                                                            * product.quantity * (1 - product.discount / 100)
-                                                        ).toFixed(2))}
+                                                    {selectedProducts.reduce((total, product) => {
+                                                        const price = selectedPriceType === "withTax" ? product.price_nett_ptr : product.price_ptr;
+                                                        const subtotal = (parseFloat(price) || 0) * product.quantity * (1 - product.discount / 100);
+                                                        return total + subtotal;
+                                                    }, 0).toFixed(2)}
                                                 </td>
 
-                                                <td className="border border-gray-300 p-2">
+                                                <td className="border border-gray-300 p-2 text-center">
                                                     <button
                                                         onClick={() => removeProduct(index)}
-                                                        className="bg-red-500 rounded-sm text-white px-2 py-1 cursor-pointer"
+                                                        className="w-7 h-7 bg-red-500 rounded-sm pl-1.5 cursor-pointer text-white"
                                                     >
-                                                        Remove
+                                                        <RiDeleteBinLine />
                                                     </button>
                                                 </td>
                                             </tr>
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan="9" className="text-center p-4 text-gray-500">No items found</td>
+                                            <td colSpan="12" className="text-center p-4 text-gray-500">No items found</td>
                                         </tr>
                                     )
                                 }
@@ -199,15 +223,13 @@ const Billing = () => {
             </div>
 
             <div className='flex items-center justify-end gap-5 px-5'>
-                <label htmlFor="">Total:</label>
+                <label htmlFor="" className='uppercase font-mono'>Total:</label>
                 <input
                     type="text"
-                    className='w-56 h-10 px-2 outline-none border-b border-gray-300 font-semibold'
+                    className='w-56 h-10 px-2 outline-none border-b border-gray-300 font-semibold shadow-md'
                     value={selectedProducts.reduce((total, product) => {
-                        const subtotal = (parseFloat(
-                            product.selectedPriceType === "withTax" ? product.price_nett_ptr : product.price_ptr
-                        ) || 0) * product.quantity * (1 - product.discount / 100);
-
+                        const price = selectedPriceType === "withTax" ? product.price_nett_ptr : product.price_ptr;
+                        const subtotal = (parseFloat(price) || 0) * product.quantity * (1 - product.discount / 100);
                         return total + subtotal;
                     }, 0).toFixed(2)}
                     readOnly

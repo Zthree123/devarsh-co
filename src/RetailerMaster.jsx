@@ -14,10 +14,6 @@ const RetailerMaster = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
-    // const handleDelete = (partyId) => {
-    //     setRetailer((prevRetailer) => prevRetailer.filter(party => party.partyId !== partyId));
-    // }
-
     const fetchRetailer = async () => {
         try {
             const response = await fetch("https://api.zthree.in/bizsura/Party?action=showParties&vendor_id=001", {
@@ -103,14 +99,14 @@ const RetailerMaster = () => {
                 <table className='w-full table-fixed border border-gray-300 border-collapse'>
                     <thead className='bg-blue-900 text-white '>
                         <tr>
-                            <th className='border-r border-gray-200 py-2 font-medium'>Party Name</th>
-                            <th className='border-r border-gray-200 py-2 font-medium'>GSTIN</th>
-                            <th className='border-r border-gray-200 py-2 font-medium'>Phone Number</th>
-                            <th className='border-r border-gray-200 py-2 font-medium'>GST Type</th>
-                            <th className='border-r border-gray-200 py-2 font-medium'>State</th>
-                            <th className='border-r border-gray-200 py-2 font-medium'>Email ID</th>
-                            <th className='border-r border-gray-200 py-2 font-medium'>Billing Address</th>
-                            <th className='border-r border-gray-200 py-2 font-medium'>Action</th>
+                            <th className='border-r border-gray-200 py-2 font-medium uppercase'>Party Name</th>
+                            <th className='border-r border-gray-200 py-2 font-medium uppercase'>GSTIN</th>
+                            <th className='border-r border-gray-200 py-2 font-medium uppercase'>Phone Number</th>
+                            <th className='border-r border-gray-200 py-2 font-medium uppercase'>GST Type</th>
+                            <th className='border-r border-gray-200 py-2 font-medium uppercase'>State</th>
+                            <th className='border-r border-gray-200 py-2 font-medium uppercase'>Email ID</th>
+                            <th className='border-r border-gray-200 py-2 font-medium uppercase'>Billing Address</th>
+                            <th className='border-r border-gray-200 py-2 font-medium uppercase'>Action</th>
                         </tr>
                     </thead>
                     <tbody>

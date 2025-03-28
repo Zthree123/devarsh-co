@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import { CiGlobe } from "react-icons/ci";
-import { FaPlus } from "react-icons/fa6";
-import { MdClear } from "react-icons/md";
 import { IoHomeOutline } from "react-icons/io5";
-import { FaArrowRight } from "react-icons/fa6";
 import { BiLinkExternal } from "react-icons/bi";
-import NewProfile from './NewProfile';
 import Dashboard from './Dashboard';
 import Billing from './Billing';
 import PartyAdding from './PartyAdding';
 
 const Masters = () => {
-    const [selectedProducts, setSelectedProducts] = useState([])
-    const [showProfile, setShowProfile] = useState(false)
-    const [profiles, setProfiles] = useState([]);
     const [isCredit, setIsCredit] = useState(true);
+    const [subTotalQty, setSubTotalQty] = useState(0);
+    const [totalQty, setTotalQty] = useState(0);
+    const [discAmount, setDiscAmount] = useState(0);
+    const [totalAmount, setTotalAmount] = useState(0);
+    const [itemNames, setItemNames] = useState([]);
 
     const togglePaymentMode = () => {
         setIsCredit(!isCredit);
@@ -33,56 +30,6 @@ const Masters = () => {
         }
     };
 
-    const handleAddProfile = (newProfile) => {
-        setProfiles((prev) => {
-            const updatedProfiles = [...prev, newProfile];
-            console.log('Profiles:', updatedProfiles);
-            return updatedProfiles;
-        });
-    };
-
-    const handleNewProfile = () => {
-        setShowProfile(true)
-    }
-
-    const closeProfileModal = () => {
-        setShowProfile(false);
-    };
-
-    const clearScreen = () => {
-        setSelectedProducts([])
-    }
-
-    const getTotalQty = () => {
-        return selectedProducts.reduce((total, product) => total + Number(product.unit), 0)
-    }
-
-    const getTotalGross = () => {
-        return selectedProducts.reduce((total, product) => {
-            return total + (product.numericPrice * product.unit);
-        }, 0).toFixed(2);
-    };
-
-    const getTotalDiscount = () => {
-        return selectedProducts.reduce((total, product) => {
-            const discount = (product.numericPrice * product.unit * parseFloat(product.discount) / 100);
-            return total + discount;
-        }, 0).toFixed(2);
-    };
-
-    const getNetTotal = () => {
-        return selectedProducts.reduce((total, product) => {
-            const numericPrice = cleanPrice(product.price);
-            const discount = parseFloat(product.discount) || 0;
-            const discountedPrice = numericPrice - (numericPrice * (discount / 100));
-            return total + (discountedPrice * product.unit);
-        }, 0).toFixed(2);
-    };
-
-    const cleanPrice = (priceString) => {
-        return parseFloat(priceString.replace(/[^\d.]/g, '')) || 0;
-    };
-
     useEffect(() => {
         const savedProducts = localStorage.getItem('selectedProducts');
         if (savedProducts) {
@@ -93,6 +40,10 @@ const Masters = () => {
         }
     }, []);
 
+    useEffect(() => {
+        console.log("Updated values:", { subTotalQty, totalQty, itemNames });
+    }, [subTotalQty, totalQty, itemNames]);
+    
     return (
         <div>
             <div className='flex justify-between px-5 py-3 bg-gray-200'>
@@ -124,16 +75,9 @@ const Masters = () => {
                             <option value="purchase-return" className='uppercase text-gray-500'>SALE RETURN</option>
                         </select>
                     </div>
-                    {/* <CiGlobe className='text-xl' />
-                    <p className='uppercase font-semibold'>devarsh & co</p> */}
                 </div>
+
                 <div className='flex gap-3 '>
-                    {/* <div
-                        onClick={clearScreen}
-                        className='inline-flex items-center text-white bg-red-600 rounded gap-1 py-1 px-2 cursor-pointer text-sm hover:bg-red-700'>
-                        <MdClear />
-                        <p className='capitalize'>clear screen</p>
-                    </div> */}
                     <Link to="/dashboard">
                         <button className=' bg-green-400 rounded gap-1 h-8 w-8 flex items-center justify-center  cursor-pointer hover:bg-green-500' size={10}>
                             <IoHomeOutline />
@@ -148,21 +92,17 @@ const Masters = () => {
                 </div>
             </div>
 
-            {/* <NewProfile
-                showProfile={showProfile}
-                onClose={closeProfileModal}
-                addProfile={handleAddProfile}
-            /> */}
-
             <PartyAdding />
 
             <Billing
-                selectedProducts={selectedProducts}
-                setSelectedProducts={setSelectedProducts}
-                profiles={profiles}
+                setSubTotalQty={setSubTotalQty} 
+                setTotalQty={setTotalQty} 
+                setDiscAmount={setDiscAmount} 
+                setTotalAmount={setTotalAmount}
+                setItemNames={setItemNames}
             />
 
-            {/* <div className='grid grid-cols-6 fixed bottom-0 w-full right-0 text-white'>
+            <div className='grid grid-cols-5 fixed bottom-0 w-full right-0 text-white'>
                 <Link
                     to='/dashboard' element={<Dashboard />}
                     className='flex items-center justify-center gap-3 py-6 bg-green-500 hover:bg-green-600'
@@ -172,38 +112,24 @@ const Masters = () => {
                 </Link>
                 <div className='grid grid-rows-2 place-items-center bg-blue-900 border-r border-r-indigo-400'>
                     <p className='uppercase'>total qty</p>
-                    <p># {getTotalQty()}</p>
-                </div>
-                <div className='grid grid-rows-2  place-items-center bg-blue-900 border-r border-r-indigo-400'>
-                    <p className='uppercase'>total gross</p>
-                    <p>RS {getTotalGross()}</p>
+                    <p># {subTotalQty}</p>
                 </div>
                 <div className='grid grid-rows-2  place-items-center bg-blue-900 border-r border-r-indigo-400'>
                     <p className='uppercase'>total disc</p>
-                    <p>RS {getTotalDiscount()}</p>
+                    <p>RS {discAmount}</p>
                 </div>
                 <div className='grid grid-rows-2  place-items-center bg-blue-900 border-r border-r-indigo-400'>
                     <p className='uppercase'>net total</p>
-                    <p>RS {getNetTotal()}</p>
+                    <p>RS  {totalAmount}</p>
                 </div>
-
-                {selectedProducts.length > 0 ? (
-                    <Link
-                        to='/payment'
-                        state={{ netTotal: getNetTotal(), selectedProducts }}
-                        className="flex items-center justify-center gap-3 px-4 py-2 uppercase text-white bg-green-500 hover:bg-green-600 rounded-md"
-                    >
-                        <FaArrowRight /> Next
-                    </Link>
-                ) : (
-                    <button
-                        disabled
-                        className="flex items-center justify-center gap-3 px-4 py-2 uppercase cursor-not-allowed text-gray-500 bg-green-400 rounded-md"
-                    >
-                        <FaArrowRight /> Next
-                    </button>
-                )}
-            </div> */}
+                <Link
+                    to='/bill' 
+                    state={{ subTotalQty, totalQty, itemNames }}
+                    className='flex items-center justify-center gap-3 py-6 bg-green-500 hover:bg-green-600'
+                >
+                    <button className='uppercase '>next</button>
+                </Link>
+            </div>
         </div>
     )
 }

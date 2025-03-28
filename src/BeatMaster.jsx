@@ -209,10 +209,10 @@ const BeatMaster = () => {
                 <table className='border border-gray-300 w-full'>
                     <thead>
                         <tr className='bg-blue-900 text-white'>
-                            <th className='py-2 font-medium border-r border-white w-40'>S.No</th>
-                            <th className='py-2 font-medium border-r border-white w-96'>Headquarters</th>
-                            <th className='py-2 font-medium border-r border-white w-96'>Beat Name</th>
-                            <th className='py-2 font-medium  w-96'>Action</th>
+                            <th className='py-2 font-medium border-r border-white w-40 uppercase'>S.No</th>
+                            <th className='py-2 font-medium border-r border-white w-96 uppercase'>Headquarters</th>
+                            <th className='py-2 font-medium border-r border-white w-96 uppercase'>Beat Name</th>
+                            <th className='py-2 font-medium  w-96 uppercase'>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -232,10 +232,7 @@ const BeatMaster = () => {
                                                 />
                                                 <p>Edit</p>
                                             </div>
-                                            {/* <HiOutlineWrenchScrewdriver
-                                                onClick={() => handleEdit(beat)}
-                                                className='cursor-pointer hover:bg-gray-200 rounded-md p-2 text-4xl'
-                                            /> */}
+            
                                             <div
                                                 onClick={() => {
                                                     setDeleteConfirmation(true)

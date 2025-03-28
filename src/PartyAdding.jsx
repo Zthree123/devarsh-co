@@ -47,58 +47,55 @@ const PartyAdding = () => {
 
     return (
         <div>
-            <div className='flex justify-between w-full py-5 px-5'>
-                <div className='relative' ref={dropdownRef}>
+            <div className='relative flex justify-between w-full py-12 px-5 gap-4' ref={dropdownRef}>
+                <input
+                    type="text"
+                    placeholder='SEARCH BY NAME'
+                    value={searchQuery}
+                    onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        setShowDropdown(true);
+                    }}
+                    className='w-60 h-10 px-2 outline-none border border-gray-300 rounded-md text-gray-500'
+                />
+
+                {showDropdown && searchQuery && (
+                    <div className="absolute left-5 top-24 w-60  bg-white border border-gray-300 rounded-md shadow-md z-10">
+                        {filteredRetailers.length > 0 ? (
+                            filteredRetailers.map((retailer) => (
+                                <div key={retailer.id} className="p-2 cursor-pointer text-gray-500 hover:bg-gray-50"
+                                    onClick={() => selectRetailer(retailer)}>
+                                    <p className='text-gray-500'>{retailer.partyName}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="p-2 text-gray-500">No retailers found</div>
+                        )}
+                    </div>
+                )}
+
+                <div className='flex gap-2 items-center justify-center'>
+                    <label htmlFor="" className=' uppercase'>Invoice Number</label>
                     <input
                         type="text"
-                        placeholder='SEARCH BY NAME'
-                        value={searchQuery}
-                        onChange={(e) => {
-                            setSearchQuery(e.target.value);
-                            setShowDropdown(true); // Show dropdown when typing
-                        }}
-                        className='w-60 h-10 px-2 outline-none border border-gray-300 rounded-md'
+                        className='w-44 h-10 px-2 outline-none border-b border-gray-300 text-gray-500'
                     />
-                    {showDropdown && searchQuery && (
-                        <div className="absolute left-0 top-12 w-60 bg-white border border-gray-300 rounded-md shadow-md z-10">
-                            {filteredRetailers.length > 0 ? (
-                                filteredRetailers.map((retailer) => (
-                                    <div key={retailer.id} className="p-2 cursor-pointer hover:bg-gray-200"
-                                        onClick={() => selectRetailer(retailer)}>
-                                        {retailer.partyName}
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="p-2 text-gray-500">No retailers found</div>
-                            )}
-                        </div>
-                    )}
                 </div>
-
-                <div>
-                    <div className='flex gap-5 items-center justify-center'>
-                        <label htmlFor="">Invoice Number</label>
-                        <input
-                            type="text"
-                            className='w-56 h-10 px-2 outline-none border-b border-gray-300 '
-                        />
-                    </div>
-                    <div className='flex gap-5 items-center justify-center'>
-                        <label htmlFor="" className='w-28'>Invoice Date</label>
-                        <input
-                            type="date"
-                            className='w-56 h-10 px-2 outline-none border-b border-gray-300 '
-                        />
-                    </div>
-                    <div className='flex gap-5 items-center justify-center'>
-                        <label htmlFor="" className='w-28'>State of supply</label>
-                        <input
-                            className='w-56 h-10 px-2 outline-none border-b border-gray-300 '
-                            type="text"
-                            value={selectedRetailer?.partyState || ""}
-                            readOnly
-                        />
-                    </div>
+                <div className='flex gap-2 items-center justify-center'>
+                    <label htmlFor="" className='uppercase'>Invoice Date</label>
+                    <input
+                        type="date"
+                        className='w-44 h-10 px-2 outline-none border-b border-gray-300 text-gray-500'
+                    />
+                </div>
+                <div className='flex gap-2 items-center justify-center'>
+                    <label htmlFor="" className='uppercase'>State of supply</label>
+                    <input
+                        className='w-44 h-10 px-2 outline-none border-b border-gray-300 text-gray-500'
+                        type="text"
+                        value={selectedRetailer?.partyState || ""}
+                        readOnly
+                    />
                 </div>
             </div>
         </div>

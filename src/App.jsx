@@ -17,6 +17,7 @@ import ProtectedRoute from './ProtectedRoute';
 import Purchases from './Purchases';
 import ParentItems from './ParentItems';
 import PartyAdding from './PartyAdding';
+import Bill from './Bill';
 
 const App = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -52,6 +53,7 @@ const App = () => {
         <Route path="/purchases" element={<Purchases />} />
         <Route path="/parentItem" element={<ParentItems />} />
         <Route path="/partyadding" element={<PartyAdding />} />
+        <Route path="/bill" element={<Bill />} />
 
 
       </Routes>

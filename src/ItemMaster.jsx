@@ -78,11 +78,11 @@ const ItemMaster = () => {
         <table className="w-full table-fixed border-collapse">
           <thead className="bg-blue-900 w-20">
             <tr className="text-left font-normal text-white">
-              <th className="p-3 border-r-2 border-gray-300 w-1/7 text-center">Item</th>
-              <th className="p-3 border-r-2 border-gray-300 w-1/7 text-center">MRP</th>
-              <th className="p-3 border-r-2 border-gray-300 w-2/7 text-center">Pricing (Without Tax)</th>
-              <th className="p-3 border-r-2 border-gray-300 w-1/7 text-center">GST</th>
-              <th className="p-3  w-2/7 text-center">Pricing (With Tax)</th>
+              <th className="p-3 border-r-2 border-gray-300 w-1/7 text-center font-medium uppercase">Item</th>
+              <th className="p-3 border-r-2 border-gray-300 w-1/7 text-center font-medium uppercase">MRP</th>
+              <th className="p-3 border-r-2 border-gray-300 w-2/7 text-center font-medium uppercase">Pricing (Without Tax)</th>
+              <th className="p-3 border-r-2 border-gray-300 w-1/7 text-center font-medium uppercase">GST</th>
+              <th className="p-3  w-2/7 text-center font-medium uppercase">Pricing (With Tax)</th>
             </tr>
           </thead>
           <tbody >
