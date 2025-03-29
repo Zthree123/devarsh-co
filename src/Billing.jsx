@@ -26,16 +26,10 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
     }, []);
 
     const addProduct = (product) => {
-        setSelectedProducts((prevProducts) => {
-            const existingProduct = prevProducts.find((p) => p.id === product.id);
-            if (existingProduct) {
-                return prevProducts.map((p) =>
-                    p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
-                );
-            } else {
-                return [...prevProducts, { ...product, quantity: 1, discount: 0 }];
-            }
-        });
+        setSelectedProducts((prevProducts) => [
+            ...prevProducts,
+            { ...product, quantity: 1, discount: 0, uniqueId: Date.now() }
+        ]);
         setSearchQuery("");
     };
 
@@ -52,31 +46,34 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
     };
 
     useEffect(() => {
-        const subTotalQty = selectedProducts.reduce((total, product) => total + product.quantity, 0); 
-        const totalQty = selectedProducts.length;
-        const itemNamesList = selectedProducts.map((product) => product.name);
-    
+        const subTotalQty = selectedProducts.reduce((total, product) => total + product.quantity, 0);
+        const totalQty = selectedProducts.reduce((sum, product) => sum + product.quantity, 0);
+        const itemDetailsList = selectedProducts.map((product) => ({
+            name: product.name,
+            quantity: product.quantity,
+            amount: (selectedPriceType === "withTax" ? product.price_nett_ptr : product.price_ptr) * product.quantity * (1 - product.discount / 100)
+        }));
+
         const discAmount = selectedProducts.reduce((total, product) => {
             const price = selectedPriceType === "withTax" ? product.price_nett_ptr : product.price_ptr;
             return total + ((price * product.quantity * product.discount) / 100);
         }, 0);
-    
+
         const totalAmount = selectedProducts.reduce((total, product) => {
             const price = selectedPriceType === "withTax" ? product.price_nett_ptr : product.price_ptr;
             return total + ((price * product.quantity) - ((price * product.quantity * product.discount) / 100));
         }, 0);
-    
-        setSubTotalQty(subTotalQty);  
-        setTotalQty(totalQty);        
-        setDiscAmount(discAmount.toFixed(2)); 
+
+        setSubTotalQty(subTotalQty);
+        setTotalQty(totalQty);
+        setDiscAmount(discAmount.toFixed(2));
         setTotalAmount(totalAmount.toFixed(2));
-    
-        // Ensure setItemNames is properly called
+
         if (typeof setItemNames === "function") {
-            setItemNames(itemNamesList);
+            setItemNames(itemDetailsList);
         }
     }, [selectedProducts, selectedPriceType, setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, setItemNames]);
-    
+
     return (
         <div>
             <div className='flex justify-between w-full gap-2 '>
@@ -90,7 +87,7 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
                     />
 
                     {searchQuery && filteredProducts.length > 0 && (
-                        <div className="border border-gray-300 rounded mt-2 bg-white absolute z-10 w-60 shadow-md">
+                        <div className="border border-gray-300 rounded mt-2 bg-white absolute z-30 w-60 shadow-md">
                             {filteredProducts.map((product) => (
                                 <div
                                     key={product.id}
@@ -103,9 +100,9 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
                         </div>
                     )}
 
-                    <div className='overflow-x-auto pb-16'>
+                    <div className='overflow-y-auto '>
                         <table className='w-full border-2 border-gray-300  mt-4 px-3 '>
-                            <thead className='p-1 bg-blue-900 text-white'>
+                            <thead className='p-1 bg-blue-900 text-white sticky top-0 z-10'>
                                 <tr>
                                     <th className='border-r border-gray-300 py-1 w-1/10 font-medium'>ITEM</th>
                                     <th className='border-r border-gray-300 py-1 w-1/10 font-medium'>BATCH </th>
@@ -137,7 +134,7 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
 
                                     <th className='border border-gray-300 py-1 w-20 font-medium'>%</th>
                                     <th className='border border-gray-300 py-1 w-20 font-medium'>RS</th>
- 
+
                                     <th className='border border-gray-300 py-1 w-20 font-medium'>%</th>
                                     <th className='border border-gray-300 py-1 w-20 font-medium'>RS</th>
 
@@ -153,8 +150,8 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
                                                 <td className="border border-gray-300 p-2">{product.name}</td>
                                                 <td className="border border-gray-300 p-2">{product.batchno || ""}</td>
                                                 <td className="border border-gray-300 p-2">{product.expiry || ""}</td>
-                                                <td className="border border-gray-300 p-2">{product.price_mrp || ""}</td>
-                                                <td className="border border-gray-300 p-2">
+                                                <td className="border border-gray-300 p-2 text-center">{product.price_mrp || ""}</td>
+                                                <td className="border border-gray-300 p-2 text-center">
                                                     <button
                                                         onClick={() => updateQuantity(index, 1)}
                                                         className="w-7 h-7 bg-green-500 rounded-sm cursor-pointer text-white"
@@ -172,7 +169,7 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
                                                 <td className="border border-gray-300 p-2 text-center">
                                                     {selectedPriceType === "withTax" ? product.price_nett_ptr : product.price_ptr}
                                                 </td>
-                                                <td className="p-2 ">
+                                                <td className="p-2 border border-gray-300">
                                                     <input
                                                         type="text"
                                                         min="0"
@@ -189,17 +186,16 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
                                                         }}
                                                     />
                                                 </td>
-                                                <td className="border border-gray-300 p-2">{((product.price_ptr * product.quantity * product.discount) / 100).toFixed(2)}</td>
-                                                <td className="border border-gray-300 p-2">{product.gstRate}</td>
-                                                <td className="border border-gray-300 p-2">{(((product.price_ptr * product.quantity * (1 - product.discount / 100)) * product.gstRate) / 100).toFixed(2)}</td>
-                                                <td className="border border-gray-300 p-2">
-                                                    {selectedProducts.reduce((total, product) => {
-                                                        const price = selectedPriceType === "withTax" ? product.price_nett_ptr : product.price_ptr;
-                                                        const subtotal = (parseFloat(price) || 0) * product.quantity * (1 - product.discount / 100);
-                                                        return total + subtotal;
-                                                    }, 0).toFixed(2)}
+                                                <td className="border border-gray-300 p-2 text-center">{((product.price_ptr * product.quantity * product.discount) / 100).toFixed(2)}</td>
+                                                <td className="border border-gray-300 p-2 text-center">{product.gstRate}</td>
+                                                <td className="border border-gray-300 p-2 text-center">{(((product.price_ptr * product.quantity * (1 - product.discount / 100)) * product.gstRate) / 100).toFixed(2)}</td>
+                                                <td className="border border-gray-300 p-2 text-center">
+                                                    {(
+                                                        (selectedPriceType === "withTax" ? product.price_nett_ptr : product.price_ptr) *
+                                                        product.quantity *
+                                                        (1 - product.discount / 100)
+                                                    ).toFixed(2)}
                                                 </td>
-
                                                 <td className="border border-gray-300 p-2 text-center">
                                                     <button
                                                         onClick={() => removeProduct(index)}
@@ -222,7 +218,7 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
                 </div>
             </div>
 
-            <div className='flex items-center justify-end gap-5 px-5'>
+            <div className='flex items-center justify-end gap-5 px-5 py-9'>
                 <label htmlFor="" className='uppercase font-mono'>Total:</label>
                 <input
                     type="text"

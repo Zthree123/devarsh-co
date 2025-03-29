@@ -47,7 +47,7 @@ const PartyAdding = () => {
 
     return (
         <div>
-            <div className='relative flex justify-between w-full py-12 px-5 gap-4' ref={dropdownRef}>
+            <div className='relative flex justify-between w-full pb-6 pt-10 px-5 gap-4' ref={dropdownRef}>
                 <input
                     type="text"
                     placeholder='SEARCH BY NAME'

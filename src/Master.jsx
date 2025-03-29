@@ -41,9 +41,9 @@ const Masters = () => {
     }, []);
 
     useEffect(() => {
-        console.log("Updated values:", { subTotalQty, totalQty, itemNames });
-    }, [subTotalQty, totalQty, itemNames]);
-    
+        console.log("Updated values:", { subTotalQty, totalQty, itemNames, totalAmount });
+    }, [subTotalQty, totalQty, itemNames, totalAmount]);
+
     return (
         <div>
             <div className='flex justify-between px-5 py-3 bg-gray-200'>
@@ -78,11 +78,11 @@ const Masters = () => {
                 </div>
 
                 <div className='flex gap-3 '>
-                    <Link to="/dashboard">
+                    {/* <Link to="/dashboard">
                         <button className=' bg-green-400 rounded gap-1 h-8 w-8 flex items-center justify-center  cursor-pointer hover:bg-green-500' size={10}>
                             <IoHomeOutline />
                         </button>
-                    </Link>
+                    </Link> */}
                     <button
                         onClick={handleFullScreen}
                         className=' bg-yellow-400 rounded gap-1 py-1 px-2 cursor-pointer text-md hover:bg-yellow-500'
@@ -92,44 +92,49 @@ const Masters = () => {
                 </div>
             </div>
 
-            <PartyAdding />
+            <div className="min-h-screen flex flex-col">
+    <div className="flex-grow">  
+        <PartyAdding />
+        <Billing
+            setSubTotalQty={setSubTotalQty}
+            setTotalQty={setTotalQty}
+            setDiscAmount={setDiscAmount}
+            setTotalAmount={setTotalAmount}
+            setItemNames={setItemNames}
+        />
+    </div>
 
-            <Billing
-                setSubTotalQty={setSubTotalQty} 
-                setTotalQty={setTotalQty} 
-                setDiscAmount={setDiscAmount} 
-                setTotalAmount={setTotalAmount}
-                setItemNames={setItemNames}
-            />
+    {/* Sticky footer */}
+    <div className='grid grid-cols-5 sticky bottom-0 w-full text-white bg-blue-900'>
+        <Link
+            to='/dashboard' element={<Dashboard />}
+            className='flex items-center justify-center gap-3 py-6 bg-green-500 hover:bg-green-600'
+        >
+            <IoHomeOutline />
+            <button className='uppercase '>home</button>
+        </Link>
+        <div className='grid grid-rows-2 place-items-center bg-blue-900 border-r border-r-indigo-400'>
+            <p className='uppercase'>total qty</p>
+            <p># {subTotalQty}</p>
+        </div>
+        <div className='grid grid-rows-2 place-items-center bg-blue-900 border-r border-r-indigo-400'>
+            <p className='uppercase'>total disc</p>
+            <p>RS {discAmount}</p>
+        </div>
+        <div className='grid grid-rows-2 place-items-center bg-blue-900 border-r border-r-indigo-400'>
+            <p className='uppercase'>net total</p>
+            <p>RS  {totalAmount}</p>
+        </div>
+        <Link
+            to='/bill'
+            state={{ subTotalQty, totalQty, itemNames, totalAmount }}
+            className='flex items-center justify-center gap-3 py-6 bg-green-500 hover:bg-green-600'
+        >
+            <button className='uppercase '>next</button>
+        </Link>
+    </div>
+</div>
 
-            <div className='grid grid-cols-5 fixed bottom-0 w-full right-0 text-white'>
-                <Link
-                    to='/dashboard' element={<Dashboard />}
-                    className='flex items-center justify-center gap-3 py-6 bg-green-500 hover:bg-green-600'
-                >
-                    <IoHomeOutline />
-                    <button className='uppercase '>home</button>
-                </Link>
-                <div className='grid grid-rows-2 place-items-center bg-blue-900 border-r border-r-indigo-400'>
-                    <p className='uppercase'>total qty</p>
-                    <p># {subTotalQty}</p>
-                </div>
-                <div className='grid grid-rows-2  place-items-center bg-blue-900 border-r border-r-indigo-400'>
-                    <p className='uppercase'>total disc</p>
-                    <p>RS {discAmount}</p>
-                </div>
-                <div className='grid grid-rows-2  place-items-center bg-blue-900 border-r border-r-indigo-400'>
-                    <p className='uppercase'>net total</p>
-                    <p>RS  {totalAmount}</p>
-                </div>
-                <Link
-                    to='/bill' 
-                    state={{ subTotalQty, totalQty, itemNames }}
-                    className='flex items-center justify-center gap-3 py-6 bg-green-500 hover:bg-green-600'
-                >
-                    <button className='uppercase '>next</button>
-                </Link>
-            </div>
         </div>
     )
 }

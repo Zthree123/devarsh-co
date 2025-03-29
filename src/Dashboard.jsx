@@ -12,10 +12,12 @@ import item_qty from './images/item_qty.png'
 import sales_qty from './images/sales_qty.png'
 import sales from './images/sales.png'
 import SalesGraph from './SalesGraph';
+import { GiExpense } from "react-icons/gi";
 
 const Dashboard = () => {
     const [mastersOpen, setMastersOpen] = useState(false)
     const [totalItems, setTotalItems] = useState(0)
+    const [expenseOpen, setExpenseOpen] = useState(false)
 
     const dashboard = [
         { head: 'Shortage Qty', amount: '#0', text: 'Items need to import', img: shortage_qty },
@@ -69,13 +71,13 @@ const Dashboard = () => {
                             <div className='absolute top-16 left-0 border z-10 bg-white border-gray-300 rounded-md w-40'>
                                 <ul className='py-1 flex flex-col'>
                                     <Link
-                                        to='/itemMaster' 
+                                        to='/itemMaster'
                                         className='hover:bg-blue-500 hover:text-white  p-2 w-full '
                                     >
                                         Item Master
                                     </Link>
                                     <Link
-                                        to='/retailerMaster' 
+                                        to='/retailerMaster'
                                         className='hover:bg-blue-500 hover:text-white  p-2 w-full '
                                     >
                                         Retailer Master
@@ -110,6 +112,33 @@ const Dashboard = () => {
                     <TbWindowMaximize />
                     <p>Billing</p>
                 </Link>
+                <div
+                    onClick={() => setExpenseOpen(!expenseOpen)}
+                    className='relative flex items-center gap-2 bg-gray-200 p-3 rounded-md hover:bg-white cursor-pointer'>
+                    <GiExpense />
+                    Expenses
+                    <FaAngleDown />
+                    {
+                        expenseOpen && (
+                            <div className='absolute top-16 left-0 border z-10 bg-white border-gray-300 rounded-md w-40'>
+                                <ul className='py-1 flex flex-col'>
+                                    <Link
+                                        to='/expense'
+                                        className='hover:bg-blue-500 hover:text-white p-2'
+                                    >
+                                        Expense Category
+                                    </Link>
+                                    <li
+                                        className='hover:bg-blue-500 hover:text-white p-2'
+                                    >
+                                        Expense
+                                    </li>
+                                </ul>
+                            </div>
+                        )
+                    }
+                </div>
+
                 <div className='flex items-center gap-2 bg-gray-200 p-3 rounded-md hover:bg-white cursor-pointer'>
                     <TbReport />
                     <p>Reports</p>
