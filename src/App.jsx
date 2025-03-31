@@ -18,6 +18,7 @@ import Purchases from './Purchases';
 import ParentItems from './ParentItems';
 import PartyAdding from './PartyAdding';
 import Bill from './Bill';
+import ExpenseCategory from './ExpenseCategory';
 import Expenses from './Expenses';
 
 const App = () => {
@@ -55,9 +56,8 @@ const App = () => {
         <Route path="/parentItem" element={<ParentItems />} />
         <Route path="/partyadding" element={<PartyAdding />} />
         <Route path="/bill" element={<Bill />} />
+        <Route path="/expensecategory" element={<ExpenseCategory />} />
         <Route path="/expense" element={<Expenses />} />
-
-
       </Routes>
     </BrowserRouter>
   );

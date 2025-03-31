@@ -175,7 +175,7 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
                                                         min="0"
                                                         max="100"
                                                         value={product.discount}
-                                                        className='w-16 px-2 py-1 outline-none rounded border border-gray-300'
+                                                        className='w-16 px-2 py-1 text-center outline-none rounded border border-gray-300'
                                                         onChange={(e) => {
                                                             const newDiscount = parseFloat(e.target.value) || 0;
                                                             setSelectedProducts(prevProducts =>

@@ -96,7 +96,7 @@ const ItemMaster = () => {
                           <p>{product.name || "N/A"}</p>
                         </div>
                       </td>
-                      <td className="p-2 border-r border-gray-300  w-1/7">₹{product.price_mrp || []}</td>
+                      <td className="p-2 border-r border-gray-300 text-center w-1/7">₹{product.price_mrp || []}</td>
                       <td className="px-5 border-r border-gray-300  w-2/7">
                         <div className="flex items-center gap-6">
                           <div className='flex items-center justify-center gap-2'>
@@ -122,7 +122,7 @@ const ItemMaster = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="p-2 border-r border-gray-300  w-1/7">{product.gstRate || "N/A"}</td>
+                      <td className="p-2 border-r border-gray-300 text-center w-1/7">{product.gstRate || "N/A"}</td>
                       <td className="px-5 border-r border-gray-300  w-2/7">
                         <div className="flex items-center gap-6">
                         <div className='flex items-center justify-center gap-2'>

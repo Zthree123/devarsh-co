@@ -13,7 +13,7 @@ const Bill = () => {
 
     return (
         <div className="p-6 border border-gray-300 rounded-lg shadow-md w-96 font-mono bg-white mx-auto mt-10">
-            <h2 className="text-xl font-bold text-center mb-3">🛒 Bill</h2>
+            <h2 className="text-xl font-bold text-center mb-3 uppercase">DEVarsh & co</h2>
             <hr className="border-t-2 border-gray-300 mb-3" />
 
             <table className="w-full border-collapse mt-3">

@@ -7,7 +7,7 @@ const Expenses = () => {
     const [amount, setAmount] = useState("");
     const [expenses, setExpenses] = useState([]);
     const [particular, setParticular] = useState("")
-    
+
     const handleSave = () => {
         if (expenseCategory && amount) {
             const newExpense = {
@@ -19,6 +19,7 @@ const Expenses = () => {
             setExpenses([...expenses, newExpense]);
             setExpenseCategory("");
             setAmount("");
+            setParticular("")
         }
     };
 
@@ -34,7 +35,7 @@ const Expenses = () => {
     return (
         <div>
             <div className='bg-gray-200 py-5 flex items-center justify-between px-16'>
-                <p className='font-semibold uppercase'>Expenses</p>
+                <p className='font-semibold uppercase'>devarsh & co</p>
                 <Link
                     to='/dashboard'
                     className='flex items-center gap-2 bg-green-500 text-white px-5 py-2 cursor-pointer rounded-md hover:bg-green-600'>
@@ -45,19 +46,19 @@ const Expenses = () => {
 
             <div className='flex items-center justify-between px-16 py-8'>
                 <div className='flex flex-col items-center gap-2'>
-                    <label className='self-start'>Expense Category</label>
-                    <input
-                        type="text"
-                        value={expenseCategory}
-                        onChange={(e) => setExpenseCategory(e.target.value)}
-                        className='outline-none border border-gray-300 rounded-md px-2 py-2 w-72' />
-                </div>
-                <div className='flex flex-col items-center gap-2'>
                     <label className='self-start'>Particular</label>
                     <input
                         type="text"
                         value={particular}
                         onChange={(e) => setParticular(e.target.value)}
+                        className='outline-none border border-gray-300 rounded-md px-2 py-2 w-72' />
+                </div>
+                <div className='flex flex-col items-center gap-2'>
+                    <label className='self-start'>Expense Category</label>
+                    <input
+                        type="text"
+                        value={expenseCategory}
+                        onChange={(e) => setExpenseCategory(e.target.value)}
                         className='outline-none border border-gray-300 rounded-md px-2 py-2 w-72' />
                 </div>
                 <div className='flex flex-col items-center gap-2'>
@@ -92,10 +93,10 @@ const Expenses = () => {
                                 (
                                     expenses.map((expense, index) => (
                                         <tr key={expense.id} className='border-b border-gray-300'>
-                                            <td className='border-r border-gray-300 text-center py-2 w-48'>{index + 1}</td>
-                                            <td className='border-r border-gray-300 text-center py-2 w-96'>{expense.category}</td>
-                                            <td className='border-r border-gray-300 text-center py-2 w-96'>{expense.particular}</td>
-                                            <td className='border-r border-gray-300 text-center py-2 w-96'>₹ {expense.amount}.00</td>
+                                            <td className='border-r border-gray-300 text-center py-3 w-48'>{index + 1}</td>
+                                            <td className='border-r border-gray-300 text-center py-3 w-96'>{expense.category}</td>
+                                            <td className='border-r border-gray-300 text-center py-3 w-96'>{expense.particular}</td>
+                                            <td className='border-r border-gray-300 text-center py-3 w-96'>₹ {expense.amount}.00</td>
                                             {/* <td className='border-r border-gray-300 text-center py-2'></td> */}
                                         </tr>
                                     ))

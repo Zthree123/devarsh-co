@@ -60,7 +60,7 @@ const PartyAdding = () => {
                 />
 
                 {showDropdown && searchQuery && (
-                    <div className="absolute left-5 top-24 w-60  bg-white border border-gray-300 rounded-md shadow-md z-10">
+                    <div className="absolute left-5 top-24 w-60  bg-white border border-gray-300 rounded-md shadow-md z-20">
                         {filteredRetailers.length > 0 ? (
                             filteredRetailers.map((retailer) => (
                                 <div key={retailer.id} className="p-2 cursor-pointer text-gray-500 hover:bg-gray-50"
