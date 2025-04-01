@@ -69,10 +69,13 @@ const Expenses = () => {
                         onChange={(e) => setAmount(e.target.value)}
                         className='outline-none border border-gray-300 rounded-md px-2 py-2 w-72' />
                 </div>
-                <div
-                    className='bg-blue-600 text-white px-20 py-3 rounded-md cursor-pointer'
-                    onClick={handleSave}>
-                    <button className='cursor-pointer'>Save</button>
+                <div className='flex flex-col items-center gap-8'>
+                    <label className='self-start'></label>
+                    <button
+                        onClick={handleSave}
+                        className='bg-blue-600 text-white px-20 py-2.5 rounded-md cursor-pointer'>
+                        Save
+                    </button>
                 </div>
             </div>
 

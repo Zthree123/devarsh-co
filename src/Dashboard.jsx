@@ -123,16 +123,16 @@ const Dashboard = () => {
                             <div className='absolute top-16 left-0 border z-10 bg-white border-gray-300 rounded-md w-40'>
                                 <ul className='py-1 flex flex-col'>
                                     <Link
-                                        to='/expensecategory'
-                                        className='hover:bg-blue-500 hover:text-white p-2'
-                                    >
-                                        Expense Category
-                                    </Link>
-                                    <Link
                                         to='/expense'
                                         className='hover:bg-blue-500 hover:text-white p-2'
                                     >
                                         Expense
+                                    </Link>
+                                    <Link
+                                        to='/expensecategory'
+                                        className='hover:bg-blue-500 hover:text-white p-2'
+                                    >
+                                        Expense Category
                                     </Link>
                                 </ul>
                             </div>
