@@ -69,10 +69,10 @@ const Masters = () => {
 
                     <div className='inline-flex items-center'>
                         <select name="" id="" className='border text-gray-500  w-44 outline-none bg-white border-gray-400 p-1 rounded'>
+                            <option value="sale" className='uppercase text-gray-500 '>SALE</option>
                             <option value="purchase" className='uppercase text-gray-500 '>PURCHASE</option>
-                            <option value="purchase" className='uppercase text-gray-500 '>SALE</option>
                             <option value="purchase-return" className='uppercase text-gray-500'>PURCHASE RETURN</option>
-                            <option value="purchase-return" className='uppercase text-gray-500'>SALE RETURN</option>
+                            <option value="sale-return" className='uppercase text-gray-500'>SALE RETURN</option>
                         </select>
                     </div>
                 </div>

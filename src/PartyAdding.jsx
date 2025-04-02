@@ -7,6 +7,12 @@ const PartyAdding = () => {
     const [selectedRetailer, setSelectedRetailer] = useState(null);
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef(null);
+    const [date, setDate] = useState("")
+
+    useEffect(() => {
+        const today = new Date().toISOString().split("T")[0]
+        setDate(today)
+    }, [])
 
     useEffect(() => {
         fetch("https://api.zthree.in/bizsura/Party?action=showParties&vendor_id=001", {
@@ -85,6 +91,8 @@ const PartyAdding = () => {
                     <label htmlFor="" className='uppercase'>Invoice Date</label>
                     <input
                         type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
                         className='w-44 h-10 px-2 outline-none border-b border-gray-300 text-gray-500'
                     />
                 </div>
