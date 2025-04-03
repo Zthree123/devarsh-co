@@ -10,10 +10,10 @@ import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { PiCurrencyInrBold } from "react-icons/pi";
 import Masters from './Master';
 
-const Payment = ({selectedProducts, setSelectedProducts}) => {
+const Payment = ({selectedProducts, setSelectedProducts, totalAmount}) => {
     const navigate = useNavigate()
     const location = useLocation();
-    const netTotal = location.state?.netTotal || "0.00";
+    const netTotal = location.state?.totalAmount || "0.00";
     const [paymentMethod, setPaymentMethod] = useState("cash");
     const [tenderedCash, setTenderedCash] = useState('')
     const [totalCash, setTotalCash] = useState(0);

@@ -80,7 +80,7 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
                 <div className='px-5 pt-6 w-full '>
                     <input
                         type="text"
-                        className='outline-none w-full border border-gray-300 rounded px-1 py-2'
+                        className='outline-none w-full border border-gray-300 rounded px-2 py-2'
                         placeholder='SEARCH ITEMS'
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}

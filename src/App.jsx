@@ -20,6 +20,10 @@ import PartyAdding from './PartyAdding';
 import Bill from './Bill';
 import ExpenseCategory from './ExpenseCategory';
 import Expenses from './Expenses';
+import Purchase from './Purchase';
+import Sale from './Sale';
+import PurchaseReturn from './PurchaseReturn';
+import SaleReturn from './SaleReturn';
 
 const App = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -53,11 +57,15 @@ const App = () => {
         <Route path="/distributorMaster" element={<DistributorMaster />} />
         <Route path="/addretailer" element={<AddParty />} />
         <Route path="/purchases" element={<Purchases />} />
+        <Route path="/purchase" element={<Purchase />} />
+        <Route path="/purchase-return" element={<PurchaseReturn />} />
         <Route path="/parentItem" element={<ParentItems />} />
         <Route path="/partyadding" element={<PartyAdding />} />
         <Route path="/bill" element={<Bill />} />
         <Route path="/expensecategory" element={<ExpenseCategory />} />
         <Route path="/expense" element={<Expenses />} />
+        <Route path="/sale" element={<Sale />} />
+        <Route path="/sale-return" element={<SaleReturn />} />
       </Routes>
     </BrowserRouter>
   );

@@ -6,25 +6,23 @@ import { BiLinkExternal } from "react-icons/bi";
 import Dashboard from './Dashboard';
 import Billing from './Billing';
 import PartyAdding from './PartyAdding';
+import Payment from './Payment';
 
-const Masters = () => {
+const Sale = () => {
     const [isCredit, setIsCredit] = useState(true);
     const [subTotalQty, setSubTotalQty] = useState(0);
     const [totalQty, setTotalQty] = useState(0);
     const [discAmount, setDiscAmount] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
     const [itemNames, setItemNames] = useState([]);
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [selectedOption, setSelectedOption] = useState("sale"); 
+    const location = useLocation(); 
+    const navigate = useNavigate();  
+
+    const [selectedOption, setSelectedOption] = useState("sale");  
 
     useEffect(() => {
-        const path = location.pathname.replace("/", "");
-        if (["sale", "purchase", "purchase-return", "sale-return"].includes(path)) {
-            setSelectedOption(path);
-        } else {
-            setSelectedOption("sale"); 
-        }
+        const path = location.pathname.replace("/", ""); 
+        setSelectedOption(path || "sale");
     }, [location.pathname]); 
 
     const handleChange = (event) => {
@@ -151,4 +149,4 @@ const Masters = () => {
     )
 }
 
-export default Masters
+export default Sale

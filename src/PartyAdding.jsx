@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { data } from 'react-router-dom';
 
 const PartyAdding = () => {
     const [retailers, setRetailers] = useState([]);
