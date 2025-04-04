@@ -24,6 +24,7 @@ import Purchase from './Purchase';
 import Sale from './Sale';
 import PurchaseReturn from './PurchaseReturn';
 import SaleReturn from './SaleReturn';
+import Order from './Order';
 
 const App = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -66,6 +67,7 @@ const App = () => {
         <Route path="/expense" element={<Expenses />} />
         <Route path="/sale" element={<Sale />} />
         <Route path="/sale-return" element={<SaleReturn />} />
+        <Route path="/order" element={<Order />} />
       </Routes>
     </BrowserRouter>
   );

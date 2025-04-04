@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { IoHomeOutline } from "react-icons/io5";
 import { BiLinkExternal } from "react-icons/bi";
 import Dashboard from './Dashboard';
-import Billing from './Billing';
 import PartyAdding from './PartyAdding';
+import BillingReturn from './BillingReturn';
 
 const SaleReturn = () => {
     const [isCredit, setIsCredit] = useState(true);
@@ -106,7 +106,7 @@ const SaleReturn = () => {
             <div className="min-h-screen flex flex-col">
                 <div className="flex-grow">
                     <PartyAdding />
-                    <Billing
+                    <BillingReturn
                         setSubTotalQty={setSubTotalQty}
                         setTotalQty={setTotalQty}
                         setDiscAmount={setDiscAmount}
