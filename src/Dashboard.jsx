@@ -139,11 +139,11 @@ const Dashboard = () => {
                         )
                     }
                 </div>
-                <Link
+                {/* <Link
                     to='/order'
                     className='flex items-center gap-2 bg-gray-200 p-3 rounded-md hover:bg-white cursor-pointer'>
                     <p>Order</p>
-                </Link>
+                </Link> */}
                 <div className='flex items-center gap-2 bg-gray-200 p-3 rounded-md hover:bg-white cursor-pointer'>
                     <TbReport />
                     <p>Reports</p>

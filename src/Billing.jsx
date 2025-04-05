@@ -5,7 +5,7 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
     const [products, setProducts] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedPriceType, setSelectedPriceType] = useState("withoutTax")
+    const [selectedPriceType, setSelectedPriceType] = useState("withTax")
 
     const filteredProducts = products.filter((product) =>
         product.name?.toLowerCase().includes(searchQuery.toLowerCase())
