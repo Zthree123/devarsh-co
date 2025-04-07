@@ -14,7 +14,8 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
     useEffect(() => {
         fetch("https://api.zthree.in/bizsura/Products?action=showProducts", {
             headers: {
-                "Authorization": "Bearer your_secret_api_key"
+                "Authorization": "Bearer your_secret_api_key",
+                "Content-Type": "application/json"
             }
         })
             .then((res) => res.json())
@@ -24,6 +25,44 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
             })
             .catch((err) => console.error("Error fetching products:", err));
     }, []);
+
+    const postOrder = async () => {
+        const orderPayload = {
+            action: "postOrder",
+            customerId: "",
+            customerName: "",
+            customerMobile: "",
+            customerAddress1: "",
+            customerAddress2: "",
+            ItemTotal: setTotalAmount,
+            DeliveryCharge: 0,
+            paymentMethod: "UPI",
+            orderItems: selectedProducts.map(product => ({
+                itemPid: product.id,
+                itemName: product.name,
+                itemPrice: selectedPriceType === "withTax" ? product.price_nett_ptr : product.price_ptr,
+                itemQty: product.quantity,
+                itemTax: product.gstRate
+            }))
+        };
+
+        try {
+            const response = await fetch("https://api.zthree.in/bizsura/Checkout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer your_secret_api_key"
+                },
+                body: JSON.stringify(orderPayload)
+            });
+            console.log("Sending order:", JSON.stringify(orderPayload, null, 2));
+
+            const data = await response.json();
+            console.log("Order posted:", data);
+        } catch (error) {
+            console.error("Error posting order:", error);
+        }
+    };
 
     const addProduct = (product) => {
         setSelectedProducts((prevProducts) => [
@@ -187,7 +226,7 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
                                                     />
                                                 </td>
                                                 <td className="border border-gray-300 p-2 text-center">{((product.price_ptr * product.quantity * product.discount) / 100).toFixed(2)}</td>
-                                                <td className="border border-gray-300 p-2 text-center">{product.gstRate}</td>
+                                                <td className="border border-gray-300 p-2 text-center">{product.gstRate || 0}</td>
                                                 <td className="border border-gray-300 p-2 text-center">{(((product.price_ptr * product.quantity * (1 - product.discount / 100)) * product.gstRate) / 100).toFixed(2)}</td>
                                                 <td className="border border-gray-300 p-2 text-center">
                                                     {(
@@ -230,6 +269,12 @@ const Billing = ({ setSubTotalQty, setTotalQty, setDiscAmount, setTotalAmount, s
                     }, 0).toFixed(2)}
                     readOnly
                 />
+                <button
+                    onClick={postOrder}
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                    Place Order
+                </button>
             </div>
         </div>
     )
